@@ -53,6 +53,8 @@ void i2c2_interface_enable(void);
 
 /**
  *  Gets the current status of the I2C2 engine
+ *
+ *  @return the status of the I2C2 engine (should be interpreted as a hex value!)
  */
 int i2c2_status(void);
 
@@ -67,19 +69,30 @@ void i2c2_start(void);
 void i2c2_stop(void);
 
 /**
- *  Stops the I2C2 engine
+ *  Writes the data to the I2DAT shift register
+ *	I2DAT is a shift register that puts byte bit by bit on the bus, from right to left (MSB first).
+ *
+ *	@param The value (data) that should be put on the bus.
+ *
+ *	@return The status of the I2C2 engine (should be interpreted as a hex value!)
  */
-int i2c2_do_write(int value);
+int i2c2_do_write(int8_t value);
 
 /**
  *	Puts a single byte on the I2C bus
  *
- *  @param The data to put on the bus
+ *  @param The data to put on the bus.
+ *
  */
-int i2c2_byte_write(int8_t data);
+void i2c2_byte_write(int8_t data);
 
-
-int8_t i2c2_do_read(int last);
+/**
+ *	Reads data from the I2DAT shift register.
+ *
+ *  @param Indicator if this is the last byte to receive.
+ *
+ */
+int8_t i2c2_do_read(int8_t last);
 
 /**
  *	Reads a single byte from the I2C bus

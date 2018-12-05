@@ -4,7 +4,7 @@
 #include <cr_section_macros.h>
 
 int initSensors(void){
-	if(initTSL2561Sensor() && initBME680Sensor()){
+	if((initTSL2561Sensor() == 0x8a) && initBME680Sensor() ){
 		return 1;
 	}
 

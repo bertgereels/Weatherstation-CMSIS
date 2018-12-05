@@ -22,23 +22,25 @@ TSL2561Gain_t;
 
 /**
  *  Initializes the TSL2561 sensor.
+ *
+ *  @return value indicating if the sensor is initialized propery (should be 8a if everything is okay)
  */
 uint8_t initTSL2561Sensor();
 
 /**
- *	Enables the TSL2561 sensor.
+ *	Enables the TSL2561 sensor by setting control bits to 0x03.
  */
 void enable();
 
 /**
- *  Disables the TSL2561 sensor.
+ *  Disables the TSL2561 senso by setting control bits to 0x00.
  */
 void disable();
 
 /**
  *  Sets the TSL2561 sensor integration time.
  *
- *  @param The new integration time value, stored in a typedef.
+ *  @param The new integration time value, stored in a typedef. More time = more light to capture = more accurate measurement.
  */
 void setIntegrationTime(TSL2561IntegrationTime_t time);
 
@@ -52,6 +54,8 @@ void setGain(TSL2561Gain_t gain);
 
 /**
  *  Reads the TSL2561 timing register.
+ *
+ *  @return the value of the TSL2561 timing register
  */
 uint8_t readTimingReg(void);
 
@@ -72,6 +76,8 @@ void getLuminosity (uint16_t *broadband, uint16_t *ir);
 
 /**
  *  Reads lux from TSL2561 sensor.
+ *
+ *  @return the lux value
  */
 float getLux(void);
 

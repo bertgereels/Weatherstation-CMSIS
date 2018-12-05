@@ -36,6 +36,7 @@ void i2c2_set_SI(){
 	i2c2_conset(0, 0, 1, 0);
 }
 
+//"For Master only functions, write 0x40 to I2CONSET".
 void i2c2_interface_enable(){
 	LPC_I2C2->I2CONSET = 0x40;
 }
@@ -63,9 +64,6 @@ void i2c2_init() {
 	//SET pinmode_OD
 	LPC_PINCON->PINMODE_OD0 |= (1<<10);
     LPC_PINCON->PINMODE_OD1 |= (1<<11);
-
-    // Set the i2c2 Interrupts in the Global Interrupts; active
-    //NVIC_EnableIRQ(I2C2_IRQn);
 
 	// give power to the i2c2 hardware
     LPC_SC->PCONP |= (1 << 26);
@@ -105,9 +103,7 @@ void i2c2_stop(){
     i2c2_clear_SI();
 }
 
-int i2c2_do_write(int value) {
-    //Write the data to I2DAT register
-	//I2DAT is a shift register that puts byte bit by bit on the bus, from right to left (MSB first).
+int i2c2_do_write(int8_t value) {
 	LPC_I2C2->I2DAT = value;
 
     // clear SI to initiate a send
@@ -118,31 +114,26 @@ int i2c2_do_write(int value) {
     return i2c2_status();
 }
 
-int i2c2_byte_write(int8_t data){
-    int ack = 0;
+void i2c2_byte_write(int8_t data){
     int status = i2c2_do_write(data); //Put data on the bus
 
     switch(status) {
-        case 0x18:		//Slave Address + Write has been transmitted, ACK has been received. The first data byte will be transmitted.
-        case 0x28:      //Data has been transmitted, ACK has been received. If the transmitted data was the lastdata byte then transmit a STOP condition, otherwise transmit the next data byte.
-            ack = 1;
+        case 0x18:		//"Slave Address + Write has been transmitted, ACK has been received. The first data byte will be transmitted".
+        case 0x28:      //"Data has been transmitted, ACK has been received. If the transmitted data was the lastdata byte then transmit a STOP condition, otherwise transmit the next data byte".
             break;
-        case 0x40:      //Previous state was State 08 or State 10. Slave Address + Read has been transmitted,ACK has been received. Data will be received and ACK returned.
-            ack = 1;
+        case 0x40:      //"Previous state was State 08 or State 10. Slave Address + Read has been transmitted,ACK has been received. Data will be received and ACK returned".
             break;
         default:
-            ack = 0;
             break;
     }
 
-    return ack;
 }
 
 int8_t i2c2_byte_read(int last){
     return (i2c2_do_read(last));
 }
 
-int8_t i2c2_do_read(int last) {
+int8_t i2c2_do_read(int8_t last) {
     // we are in state 0x40 (SLA+R tx'd) or 0x50 (data rx'd and ack)
     if(last) {
         i2c2_conclr( 0, 0, 0, 1); // send a NOT ACK

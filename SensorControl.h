@@ -21,7 +21,4 @@ void getMeasurements(Measurements *structToStoreIn);
 void printMeasurements(Measurements *measurementsToPrint);
 void measurementToString(char* destination, Measurements *measurement);
 
-
-
-
 #endif
