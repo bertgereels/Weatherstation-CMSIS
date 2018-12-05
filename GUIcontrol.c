@@ -23,7 +23,7 @@ int32_t gui_getValue(const char *query){
     while(1){
         Command command=NONE;
         while(command==NONE){
-        	if(timer_getValue(1)>=1000000){
+        	if(timer_getValue(1)>=250000){
         		blinkingOn= !blinkingOn;
         		timer_start(1);
         		if(blinkingOn){
