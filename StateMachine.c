@@ -11,11 +11,13 @@
 #include "delay.h"
 
 int main(void){
+	/*
 	timer_start(1);
 	while(1){
 		lcd_printf("%i",timer_getValue(1));
 		wait_s(1);
-	}
+	}*/
+	gui_getValue("Seconds between");
 	/*
 	currentState = INIT;
     while(1){

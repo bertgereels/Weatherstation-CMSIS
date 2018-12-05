@@ -14,16 +14,25 @@ void gui_getSettings(Settings *settings){
 }
 
 int32_t gui_getValue(const char *query){
-	int on;
+	int blinkingOn=0;
     int selectedIndex=0;
     char setting[11]="0000000000";
+    char settingBlinking[11];
     wait_ms(200);
+    timer_start(1);
     while(1){
-        lcd_printf("%s\n     %s",query,setting);
         Command command=NONE;
         while(command==NONE){
-        	timer_start(1);
-        	timer_getValue(1);
+        	if(timer_getValue(1)>=1000000){
+        		blinkingOn= !blinkingOn;
+        		timer_start(1);
+        		if(blinkingOn){
+        			lcd_printf("%s\n     %s",query,setting);
+        		 } else {
+        		 	lcd_printf("%s\n     %s",query,"lol");
+        		 }
+        	}
+
             command=buttons_getCommand();
         }
         switch(command){
