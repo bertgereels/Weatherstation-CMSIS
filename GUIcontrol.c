@@ -29,10 +29,11 @@ int32_t gui_getValue(const char *query){
         		if(blinkingOn){
         			lcd_printf("%s\n     %s",query,setting);
         		 } else {
-        		 	lcd_printf("%s\n     %s",query,"lol");
+        			memcpy(settingBlinking,setting,sizeof(settingBlinking));
+        			settingBlinking[selectedIndex]=' ';
+        		 	lcd_printf("%s\n     %s",query,settingBlinking);
         		 }
         	}
-
             command=buttons_getCommand();
         }
         switch(command){
