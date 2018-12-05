@@ -29,6 +29,7 @@ void setRefreshPeriod(int sec);
 
 Measurements meting;
 enum State currentState;
-int refreshPeriod;
+int8_t refreshPeriod;
+int32_t unixTime;
 
 #endif
