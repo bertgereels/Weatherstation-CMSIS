@@ -24,13 +24,8 @@ void i2c2_conset(int start, int stop, int interrupt, int acknowledge) {
                        | (acknowledge << 2);
 }
 
-int i2c2_wait_SI() {
-    int timeout = 0;
-    while (!(LPC_I2C2->I2CONSET & (1 << 3))) {
-        timeout++;
-        if (timeout > 100000) return -1;
-    }
-    return 0;
+void i2c2_wait_SI() {
+    wait_ms(1);
 }
 
 void i2c2_clear_SI() {
@@ -85,8 +80,7 @@ void i2c2_init() {
     i2c2_interface_enable();
 }
 
-int i2c2_start(){
-	int status;
+void i2c2_start(){
 	int isInterrupted = LPC_I2C2->I2CONSET & (1 << 3);
 
 	//Before master mode initialisation, set I2CON
@@ -99,32 +93,21 @@ int i2c2_start(){
 	}
 
 	i2c2_wait_SI();
-	status = i2c2_status();
 
+	//Clear start bit
 	i2c2_conclr(1, 0, 0, 0);
 
-	//printf("Status after starting is:%x\r\n", status);
-	return status;
 }
 
-int i2c2_stop(){
-	int timeout = 0;
-
+void i2c2_stop(){
 	// write the stop bit
 	i2c2_conset(0, 1, 0, 0);
     i2c2_clear_SI();
-
-	// wait for STO bit to reset
-	while(LPC_I2C2->I2CONSET  & (1 << 4)) {
-		timeout ++;
-		if (timeout > 100000) return 1;
-	}
-
-	return 0;
 }
 
-int i2c2_do_write(int value, uint8_t addr) {
-    // write the data
+int i2c2_do_write(int value) {
+    //Write the data to I2DAT register
+	//I2DAT is a shift register that puts byte bit by bit on the bus, from right to left (MSB first).
 	LPC_I2C2->I2DAT = value;
 
     // clear SI to initiate a send
@@ -135,19 +118,16 @@ int i2c2_do_write(int value, uint8_t addr) {
     return i2c2_status();
 }
 
-int i2c2_byte_write(int data){
+int i2c2_byte_write(int8_t data){
     int ack = 0;
-    int status = i2c2_do_write(data & 0xFF, 0);
+    int status = i2c2_do_write(data); //Put data on the bus
 
     switch(status) {
-        case 0x18:
-        case 0x28:      // Master transmit ACKs
+        case 0x18:		//Slave Address + Write has been transmitted, ACK has been received. The first data byte will be transmitted.
+        case 0x28:      //Data has been transmitted, ACK has been received. If the transmitted data was the lastdata byte then transmit a STOP condition, otherwise transmit the next data byte.
             ack = 1;
             break;
-        case 0x40:      // Master receive address transmitted ACK
-            ack = 1;
-            break;
-        case 0xB8:      // Slave transmit ACK
+        case 0x40:      //Previous state was State 08 or State 10. Slave Address + Read has been transmitted,ACK has been received. Data will be received and ACK returned.
             ack = 1;
             break;
         default:
@@ -158,12 +138,11 @@ int i2c2_byte_write(int data){
     return ack;
 }
 
-int i2c2_byte_read(int last){
-	//printf("The status is: %x\r\n", i2c2_status());
-    return (i2c2_do_read(last) & 0xFF);
+int8_t i2c2_byte_read(int last){
+    return (i2c2_do_read(last));
 }
 
-int i2c2_do_read(int last) {
+int8_t i2c2_do_read(int last) {
     // we are in state 0x40 (SLA+R tx'd) or 0x50 (data rx'd and ack)
     if(last) {
         i2c2_conclr( 0, 0, 0, 1); // send a NOT ACK
@@ -171,14 +150,14 @@ int i2c2_do_read(int last) {
         i2c2_conset(0, 0, 0, 1); // send a ACK
     }
 
-    // accept byte
+    //Byte is ready to be received
     i2c2_clear_SI();
 
-    // wait for it to arrive
+    //Wait for the byte to arrive
     i2c2_wait_SI();
 
     // return the data
-    return (LPC_I2C2->I2DAT & 0xFF);
+    return (LPC_I2C2->I2DAT);
 }
 
 
