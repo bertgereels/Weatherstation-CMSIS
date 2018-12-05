@@ -19,12 +19,12 @@ int main(void){
 void stateMachine(void){
 	switch(currentState){
 	case INIT:
-		setRefreshPeriod(20);
+		//setRefreshPeriod(20);
 		lcd_init();
 		i2c2_init();
 		if(!initSensors() && i2c2_status() == 0xf8){
 			printf("Everything initialized succesfully!\r\n");
-			currentState = SETTIME;
+			currentState = SETPERIOD;
 		}else{
 			currentState = INITFAIL;
 		}
@@ -38,9 +38,11 @@ void stateMachine(void){
 		currentState = INIT;
 		break;
 	case SETPERIOD:
+		setRefreshPeriod(gui_getValue("Seconds between"));
 		currentState = SETTIME;
 		break;
 	case SETTIME:
+		gui_getValue("Enter UNIX time");
 		currentState = STARTTIMERS;
 		break;
 	case STARTTIMERS:

@@ -2,35 +2,35 @@
 #include "GPIOdriver.h"
 
 void mbedPin_init(uint8_t mbedPin){
-    if(isValidPin(mbedPin)){
-        LPCpin_init(getLPCport(mbedPin),getLPCpin(mbedPin));
+    if(mbedPin_isValid(mbedPin)){
+        LPCpin_init(mbedPin_getLPCport(mbedPin),mbedPin_getLPCpin(mbedPin));
     }
 }
 
 void mbedPin_on(uint8_t mbedPin){
-    if(isValidPin(mbedPin)){
-        LPCpin_on(getLPCport(mbedPin),getLPCpin(mbedPin));
+    if(mbedPin_isValid(mbedPin)){
+        LPCpin_on(mbedPin_getLPCport(mbedPin),mbedPin_getLPCpin(mbedPin));
     }
 }
 
 void mbedPin_off(uint8_t mbedPin){
-    if(isValidPin(mbedPin)){
-        LPCpin_off(getLPCport(mbedPin),getLPCpin(mbedPin));
+    if(mbedPin_isValid(mbedPin)){
+        LPCpin_off(mbedPin_getLPCport(mbedPin),mbedPin_getLPCpin(mbedPin));
     }
 }
 
 void mbedPin_write(int value,uint8_t mbedPin){
-    if(isValidPin(mbedPin)){
-        LPCpin_write(value,getLPCport(mbedPin),getLPCpin(mbedPin));
+    if(mbedPin_isValid(mbedPin)){
+        LPCpin_write(value,mbedPin_getLPCport(mbedPin),mbedPin_getLPCpin(mbedPin));
     }
 }
 
-int isValidPin(uint8_t mbedPin){
+int mbedPin_isValid(uint8_t mbedPin){
     return (mbedPin>=5&&mbedPin<=32);
 }
 
 void LPCpin_init(uint8_t port, uint8_t pin){
-    if(IsValidLpcPortPin(port,pin)){
+    if(lpcPortPin_isValid(port,pin)){
         LPC_GPIO_TypeDef* portGPIO=getGPIOTypeDef(port);
         portGPIO->FIODIR |= 1 << pin;
         portGPIO->FIOMASK &= ~(1 << pin);
@@ -53,7 +53,7 @@ void LPCpin_init(uint8_t port, uint8_t pin){
 }
 
 void LPCpin_on(uint8_t port, uint8_t pin){
-    if(IsValidLpcPortPin(port,pin)){
+    if(lpcPortPin_isValid(port,pin)){
         LPC_GPIO_TypeDef* portGPIO=getGPIOTypeDef(port);
         portGPIO->FIOSET |= 1 << pin;
     }
@@ -72,7 +72,7 @@ void LPCpin_on(uint8_t port, uint8_t pin){
 }
 
 void LPCpin_off(uint8_t port, uint8_t pin){
-    if(IsValidLpcPortPin(port,pin)){
+    if(lpcPortPin_isValid(port,pin)){
         LPC_GPIO_TypeDef* portGPIO=getGPIOTypeDef(port);
         portGPIO->FIOCLR |= 1 << pin;
     }
@@ -101,18 +101,18 @@ void LPCpin_write(int value,uint8_t port, uint8_t pin){
     }
 }
 
-uint8_t getLPCport(uint8_t mbedPin){
+uint8_t mbedPin_getLPCport(uint8_t mbedPin){
     static int LPCports[]={-1,-1,-1,-1,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,2,2,2,2,2,2,0,0,0,0,0,0}; //Source: mbed pins excel file on toledo.
-    if(isValidPin(mbedPin)){
+    if(mbedPin_isValid(mbedPin)){
         return LPCports[mbedPin];
     } else {
         return -1;
     }
 }
 
-uint8_t getLPCpin(uint8_t mbedPin){
+uint8_t mbedPin_getLPCpin(uint8_t mbedPin){
     static int LPCpins[]={-1,-1,-1,-1,-1,9,8,7,6,0,1,18,17,15,16,23,24,25,26,30,31,5,4,3,2,1,0,11,10,5,4,29,30}; //Source: mbed pins excel file on toledo.
-    if(isValidPin(mbedPin)){
+    if(mbedPin_isValid(mbedPin)){
         return LPCpins[mbedPin];
     } else {
         return -1;
@@ -146,7 +146,7 @@ void mbedPins_init(uint8_t offset,uint8_t length){
  * Initialize port as input. Port is input by default, unless previously changed to write mode.
  */
 void LPCpin_initIn(uint8_t port, uint8_t pin){
-    if(IsValidLpcPortPin(port,pin)){
+    if(lpcPortPin_isValid(port,pin)){
         LPC_GPIO_TypeDef* portGPIO=getGPIOTypeDef(port);
         portGPIO->FIODIR &= ~(1 << pin); //Set bit off
         //TODO mask
@@ -154,7 +154,7 @@ void LPCpin_initIn(uint8_t port, uint8_t pin){
 }
 
 uint8_t LPCpin_read(uint8_t port, uint8_t pin){
-    if(IsValidLpcPortPin(port,pin)){
+    if(lpcPortPin_isValid(port,pin)){
         LPC_GPIO_TypeDef* portGPIO=getGPIOTypeDef(port);
         return bitAtRightIndex(portGPIO->FIOPIN,pin);
     } else {
@@ -163,7 +163,7 @@ uint8_t LPCpin_read(uint8_t port, uint8_t pin){
 }
 
 uint8_t mbedPin_read(uint8_t mbedPin){
-    return LPCpin_read(getLPCport(mbedPin),getLPCpin(mbedPin));
+    return LPCpin_read(mbedPin_getLPCport(mbedPin),mbedPin_getLPCpin(mbedPin));
 }
 
 LPC_GPIO_TypeDef* getGPIOTypeDef(uint8_t port){
@@ -182,16 +182,16 @@ LPC_GPIO_TypeDef* getGPIOTypeDef(uint8_t port){
     return 0;
 }
 
-int IsValidLpcPort(uint8_t port){
+int lpcPort_isValid(uint8_t port){
     return (port>=0)||(port<=4);
 }
 
-int IsValidLpcPin(uint8_t pin){
+int lpcPin_isValid(uint8_t pin){
     return (pin>=0)||(pin<32);
 }
 
-int IsValidLpcPortPin(uint8_t port,uint8_t pin){
-    return IsValidLpcPort(port)&&IsValidLpcPin(pin);
+int lpcPortPin_isValid(uint8_t port,uint8_t pin){
+    return lpcPort_isValid(port)&&lpcPin_isValid(pin);
 }
 
 uint8_t bitAtRightIndex(uint32_t input,uint8_t index){
