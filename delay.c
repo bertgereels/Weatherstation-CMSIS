@@ -1,10 +1,5 @@
 #include "delay.h"
 
-void wait_s(int s){
-    wait_ms(s * 1000); //1s = 1000ms
-}
-
-
 void wait_ms(int ms){
     wait_us(ms * 1000); //1ms = 1000µs
 }

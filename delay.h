@@ -3,7 +3,6 @@
 
 #include "LPC17xx.h"
 
-void wait_s(int s);
 void wait_ms(int ms);
 void wait_us(int us);
 

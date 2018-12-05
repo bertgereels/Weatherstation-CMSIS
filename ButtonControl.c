@@ -1,10 +1,10 @@
 #include "ButtonControl.h"
 #include "GPIOdriver.h"
 
-enum Command getCommand(){
+Command buttons_getCommand(){
     for(int i=INC; i<=SUBMIT; i++){ //Check all possible commands
         if(!mbedPin_read(i)){
-            return (enum Command) i;
+            return (Command) i;
         }
     }
     return NONE;

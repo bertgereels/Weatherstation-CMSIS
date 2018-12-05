@@ -99,6 +99,7 @@ int lcd_putc(int value) {
 }
 
 void lcd_setText(char* text){
+    lcd_cls();
     for(int i=0;i<34;i++){
         if(text[i]=='\0'){
             break;
