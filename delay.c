@@ -47,8 +47,11 @@ void timer_start(uint8_t number){
 		//Prescalar op 24 -> (SystemCoreClock/4)/1000000 = 24
 		timer->PR = (SystemCoreClock / 4) / 1000000;
 
-		//Start de timer 0
+		//Start de timer
 		timer->TCR = 0x01;
+
+		//interrupt uitzetten
+		LPC_TIM0->MCR &= ~(0x01);
 	}
 }
 

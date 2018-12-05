@@ -14,6 +14,7 @@ void gui_getSettings(Settings *settings){
 }
 
 int32_t gui_getValue(const char *query){
+	int on;
     int selectedIndex=0;
     char setting[11]="0000000000";
     wait_ms(200);
@@ -21,6 +22,8 @@ int32_t gui_getValue(const char *query){
         lcd_printf("%s\n     %s",query,setting);
         Command command=NONE;
         while(command==NONE){
+        	timer_start(1);
+        	timer_getValue(1);
             command=buttons_getCommand();
         }
         switch(command){
