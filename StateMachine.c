@@ -8,12 +8,19 @@
 #include "SensorControl.h"
 #include "TextLCD.h"
 #include "StateMachine.h"
+#include "delay.h"
 
 int main(void){
+	timer_start(1);
+	while(1){
+		lcd_printf("%i",timer_getValue(1));
+		wait_s(1);
+	}
+	/*
 	currentState = INIT;
     while(1){
     	stateMachine();
-    }
+    }*/
 }
 
 void stateMachine(void){
