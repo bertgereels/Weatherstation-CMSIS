@@ -3,6 +3,38 @@
 #include <stdint.h>
 #include "LPC17xx.h"
 
+enum Buttons {
+    SW301 = 5,
+    SW304 = 6,
+    SW306 = 7,
+    SW308 = 8,
+    SW310 = 9,
+    SW312 = 10,
+    SW314 = 11,
+    SW316 = 12,
+
+    SW318 = 13,
+    SW320 = 14,
+    SW322 = 15,
+    SW323 = 16,
+    SW324 = 17,
+    SW325 = 18,
+    SW326 = 19,
+    SW328 = 20,
+
+    SW302 = 21,
+    SW305 = 22,
+    SW307 = 23,
+    SW309 = 24,
+    SW311 = 25,
+    SW313 = 26,
+    SW315 = 27,
+    SW317 = 28,
+
+    SW319 = 29,
+    SW321 = 30,
+};
+
 void mbedPin_init(uint8_t mbedPin);
 void mbedPin_on(uint8_t mbedPin);
 void mbedPin_off(uint8_t mbedPin);

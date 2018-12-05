@@ -1,3 +1,5 @@
+//This file is not used in the final solution
+
 #include "ButtonControl.h"
 #include "GPIOdriver.h"
 #include "TextLCD.h"
@@ -17,4 +19,12 @@ void testButtons(){
     } else {
         lcd_setText("Pressed");
     }*/
+}
+
+void testGetCommand(){
+    char output[34];
+    lcd_init();
+    Command command=buttons_getCommand();
+    snprintf(output, sizeof(output), "Command is: %i", (int) command);
+    lcd_setText(output);
 }
