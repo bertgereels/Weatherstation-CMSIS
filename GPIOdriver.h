@@ -35,21 +35,21 @@ enum Buttons {
     SW321 = 30,
 };
 
-void mbedPin_init(uint8_t mbedPin); //
+void mbedPin_init(uint8_t mbedPin);
 void mbedPin_on(uint8_t mbedPin);
 void mbedPin_off(uint8_t mbedPin);
 void mbedPin_write(int value,uint8_t mbedPin);
 int mbedPin_isValid(uint8_t mbedPin);
-void LPCpin_init(uint8_t port, uint8_t pin);
-void LPCpin_on(uint8_t port, uint8_t pin);
-void LPCpin_off(uint8_t port, uint8_t pin);
-void LPCpin_write(int value,uint8_t port, uint8_t pin);
+void lpcPin_init(uint8_t port, uint8_t pin);
+void lpcPin_on(uint8_t port, uint8_t pin);
+void lpcPin_off(uint8_t port, uint8_t pin);
+void lpcPin_write(int value,uint8_t port, uint8_t pin);
 uint8_t mbedPin_getLPCport(uint8_t mbedPin);
 uint8_t mbedPin_getLPCpin(uint8_t mbedPin);
 void mbedPins_write(uint32_t value,uint8_t offset,uint8_t length);
 void mbedPins_init(uint8_t offset,uint8_t length);
-void LPCpin_initIn(uint8_t port, uint8_t pin);
-uint8_t LPCpin_read(uint8_t port, uint8_t pin);
+void lpcPin_initIn(uint8_t port, uint8_t pin);
+uint8_t lpcPin_read(uint8_t port, uint8_t pin);
 uint8_t mbedPin_read(uint8_t mbedPin);
 LPC_GPIO_TypeDef* getGPIOTypeDef(uint8_t port);
 int lpcPort_isValid(uint8_t port);

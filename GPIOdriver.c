@@ -3,25 +3,25 @@
 
 void mbedPin_init(uint8_t mbedPin){
     if(mbedPin_isValid(mbedPin)){
-        LPCpin_init(mbedPin_getLPCport(mbedPin),mbedPin_getLPCpin(mbedPin));
+        lpcPin_init(mbedPin_getLPCport(mbedPin),mbedPin_getLPCpin(mbedPin));
     }
 }
 
 void mbedPin_on(uint8_t mbedPin){
     if(mbedPin_isValid(mbedPin)){
-        LPCpin_on(mbedPin_getLPCport(mbedPin),mbedPin_getLPCpin(mbedPin));
+        lpcPin_on(mbedPin_getLPCport(mbedPin),mbedPin_getLPCpin(mbedPin));
     }
 }
 
 void mbedPin_off(uint8_t mbedPin){
     if(mbedPin_isValid(mbedPin)){
-        LPCpin_off(mbedPin_getLPCport(mbedPin),mbedPin_getLPCpin(mbedPin));
+        lpcPin_off(mbedPin_getLPCport(mbedPin),mbedPin_getLPCpin(mbedPin));
     }
 }
 
 void mbedPin_write(int value,uint8_t mbedPin){
     if(mbedPin_isValid(mbedPin)){
-        LPCpin_write(value,mbedPin_getLPCport(mbedPin),mbedPin_getLPCpin(mbedPin));
+        lpcPin_write(value,mbedPin_getLPCport(mbedPin),mbedPin_getLPCpin(mbedPin));
     }
 }
 
@@ -29,7 +29,7 @@ int mbedPin_isValid(uint8_t mbedPin){
     return (mbedPin>=5&&mbedPin<=32);
 }
 
-void LPCpin_init(uint8_t port, uint8_t pin){
+void lpcPin_init(uint8_t port, uint8_t pin){
     if(lpcPortPin_isValid(port,pin)){
         LPC_GPIO_TypeDef* portGPIO=getGPIOTypeDef(port);
         portGPIO->FIODIR |= 1 << pin;
@@ -52,7 +52,7 @@ void LPCpin_init(uint8_t port, uint8_t pin){
   }*/
 }
 
-void LPCpin_on(uint8_t port, uint8_t pin){
+void lpcPin_on(uint8_t port, uint8_t pin){
     if(lpcPortPin_isValid(port,pin)){
         LPC_GPIO_TypeDef* portGPIO=getGPIOTypeDef(port);
         portGPIO->FIOSET |= 1 << pin;
@@ -71,7 +71,7 @@ void LPCpin_on(uint8_t port, uint8_t pin){
     }*/
 }
 
-void LPCpin_off(uint8_t port, uint8_t pin){
+void lpcPin_off(uint8_t port, uint8_t pin){
     if(lpcPortPin_isValid(port,pin)){
         LPC_GPIO_TypeDef* portGPIO=getGPIOTypeDef(port);
         portGPIO->FIOCLR |= 1 << pin;
@@ -93,11 +93,11 @@ void LPCpin_off(uint8_t port, uint8_t pin){
 /*
  * Write a single bit
  */
-void LPCpin_write(int value,uint8_t port, uint8_t pin){
+void lpcPin_write(int value,uint8_t port, uint8_t pin){
     if(value){
-        LPCpin_on(port,pin);
+        lpcPin_on(port,pin);
     } else {
-        LPCpin_off(port,pin);
+        lpcPin_off(port,pin);
     }
 }
 
@@ -145,7 +145,7 @@ void mbedPins_init(uint8_t offset,uint8_t length){
 /*
  * Initialize port as input. Port is input by default, unless previously changed to write mode.
  */
-void LPCpin_initIn(uint8_t port, uint8_t pin){
+void lpcPin_initIn(uint8_t port, uint8_t pin){
     if(lpcPortPin_isValid(port,pin)){
         LPC_GPIO_TypeDef* portGPIO=getGPIOTypeDef(port);
         portGPIO->FIODIR &= ~(1 << pin); //Set bit off
@@ -153,7 +153,7 @@ void LPCpin_initIn(uint8_t port, uint8_t pin){
     }
 }
 
-uint8_t LPCpin_read(uint8_t port, uint8_t pin){
+uint8_t lpcPin_read(uint8_t port, uint8_t pin){
     if(lpcPortPin_isValid(port,pin)){
         LPC_GPIO_TypeDef* portGPIO=getGPIOTypeDef(port);
         return bitAtRightIndex(portGPIO->FIOPIN,pin);
@@ -163,7 +163,7 @@ uint8_t LPCpin_read(uint8_t port, uint8_t pin){
 }
 
 uint8_t mbedPin_read(uint8_t mbedPin){
-    return LPCpin_read(mbedPin_getLPCport(mbedPin),mbedPin_getLPCpin(mbedPin));
+    return lpcPin_read(mbedPin_getLPCport(mbedPin),mbedPin_getLPCpin(mbedPin));
 }
 
 LPC_GPIO_TypeDef* getGPIOTypeDef(uint8_t port){
