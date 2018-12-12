@@ -12,7 +12,6 @@
 #define TSL2561_AGC_THI_402MS     (63000)   ///< Max value at Ti 402ms = 65535
 #define TSL2561_AGC_TLO_402MS     (500)     ///< Min value at Ti 402ms = 500
 
-int8_t tsl2561_addr = 0x29;
 TSL2561IntegrationTime_t _TSL2561IntegrationTime;
 TSL2561Gain_t _TSL2561Gain;
 float integ_time;
@@ -20,14 +19,9 @@ int8_t gain;
 uint8_t dt[4];
 uint32_t ch0;
 uint32_t ch1;
+int8_t tsl2561_addr = 0x29;
 
 void enable(void){
-//    printf("In enable()\r\n");
-//    uint8_t data[4];
-//    data[0] = 0x80 | 0x00;
-//    data[1] = 0x03;
-//    i2c2_write((int)tsl2561_addr << 1, (char *)data, 2, false);
-
     i2c2_start();
     i2c2_byte_write(tsl2561_addr << 1);
     i2c2_byte_write(0x80 | 0x00);
@@ -36,12 +30,6 @@ void enable(void){
 }
 
 void disable(void){
-//	printf("In disable()\r\n");
-//  uint8_t data[4];
-//  data[0] = 0x80 | 0x00;
-//  data[1] = 0x00;
-//  i2c2_write((int)tsl2561_addr << 1, (char *)data, 2, false);
-
     i2c2_start();
     i2c2_byte_write(tsl2561_addr << 1);
     i2c2_byte_write(0x80 | 0x00);
@@ -51,20 +39,17 @@ void disable(void){
 
 
 uint8_t initTSL2561Sensor(){
-//	printf("In initSensor()\r\n");
-//	uint8_t data[4];
-//	data[0] = 0x80 | 0x0A;
-//  i2c2_write((int)tsl2561_addr << 1, (char *)data, 1, true);
-//  i2c2_read(tsl2561_addr << 1, (char *)data, 1, false);
-//  printf("Response = %x\r\n", (uint8_t)data[0]);
-
     uint8_t data[4];
     i2c2_start();
     i2c2_byte_write(tsl2561_addr << 1);
     i2c2_byte_write(0x80 | 0x0A);
-//  data[0] = i2c2_byte_read(1);
     data[0] = i2c2_byte_read(0);
     i2c2_stop();
+
+    integ_time = 402.0;
+    _TSL2561IntegrationTime = TSL2561_INTEGRATIONTIME_402MS;
+    gain = 1;
+    _TSL2561Gain = TSL2561_GAIN_1X;
 
     setIntegrationTime(_TSL2561IntegrationTime);
     setGain(_TSL2561Gain);
@@ -73,15 +58,6 @@ uint8_t initTSL2561Sensor(){
 }
 
 void setIntegrationTime(TSL2561IntegrationTime_t time){
-//	printf("In setIntegrationTime()\r\n");
-//  enable();
-//  uint8_t data[4];
-//  data[0] = 0x80 | 0x01;
-//  data[1] = time | TSL2561_GAIN_1X ;
-//  i2c2_write((int)tsl2561_addr << 1, (char *)data, 2, false);
-//  _TSL2561IntegrationTime = time;
-//  disable();
-
     enable();
     i2c2_start();
     i2c2_byte_write(tsl2561_addr << 1);
@@ -93,15 +69,6 @@ void setIntegrationTime(TSL2561IntegrationTime_t time){
 }
 
 void setGain(TSL2561Gain_t gain){
-//	printf("In setGain()\r\n");
-//  enable();
-//  uint8_t data[4];
-//  data[0] = 0x80 | 0x01;
-//  data[1] = _TSL2561IntegrationTime | gain;
-//  i2c2_write((int)tsl2561_addr << 1, (char *)data, 2, false);
-//  _TSL2561Gain = gain;
-//  disable();
-
     enable();
     i2c2_start();
     i2c2_byte_write(tsl2561_addr << 1);
@@ -112,87 +79,15 @@ void setGain(TSL2561Gain_t gain){
     disable();
 }
 
-uint8_t readTimingReg(void){
-//	//printf("In readTimingReg()\r\n");
-//    uint8_t i, data;
-//
-//    uint8_t data_to_send[4];
-//    data_to_send[0] = 0x80 | 0x01;
-//    //i2c0_write((int)tsl2561_addr << 1,(char *)data_to_send, 1, true);
-//    //i2c0_read(tsl2561_addr << 1,(char *)data_to_send, 1, false);
-//    data = data_to_send[0];
-
-	uint8_t i;
-    uint8_t data;
-    i2c2_start();
-    i2c2_byte_write(tsl2561_addr << 1);
-    i2c2_byte_write(0x80 | 0x01);
-    //data = i2c2_byte_read(1);
-    data = i2c2_byte_read(0);
-    i2c2_stop();
-
-    if (data & TSL2561_GAIN_16X) {
-        gain = 16;
-        _TSL2561Gain = TSL2561_GAIN_16X;
-    } else {
-        gain = 1;
-        _TSL2561Gain = TSL2561_GAIN_1X;
-    }
-    i = data & 0x3;
-    switch (i) {
-        case 0:
-            integ_time = 13.7;
-            _TSL2561IntegrationTime = TSL2561_INTEGRATIONTIME_13MS;
-            break;
-        case 1:
-            integ_time = 101.0;
-            _TSL2561IntegrationTime = TSL2561_INTEGRATIONTIME_101MS;
-            break;
-        case 2:
-            integ_time = 402.0;
-            _TSL2561IntegrationTime = TSL2561_INTEGRATIONTIME_402MS;
-            break;
-        default:
-            integ_time = 0;
-            _TSL2561IntegrationTime = TSL2561_INTEGRATIONTIME_13MS;
-            break;
-    }
-    return dt[0];
-}
-
 void getData (uint16_t *broadband, uint16_t *ir){
-	//printf("In getData()\r\n");
     enable();
 
     /* Wait x ms for ADC to complete */
-    switch (_TSL2561IntegrationTime) {
-        case TSL2561_INTEGRATIONTIME_13MS:
-            wait_ms(TSL2561_DELAY_INTTIME_13MS);
-            //osWait(TSL2561_DELAY_INTTIME_13MS);
-            break;
-        case TSL2561_INTEGRATIONTIME_101MS:
-            wait_ms(TSL2561_DELAY_INTTIME_101MS);
-            break;
-        default:
-            wait_ms(TSL2561_DELAY_INTTIME_402MS);
-            break;
-    }
-
+    wait_ms(TSL2561_DELAY_INTTIME_402MS);
 
     //--------------------------------------------------------------
     //- Reads a two byte value from channel 0 (visible + infrared) -
     //--------------------------------------------------------------
-
-    //Multiple bytes at a time
-//    uint8_t data_to_send_1[4];
-//    data_to_send_1[0] = 0x80 | 0x20 | 0x0c;
-//    i2c0_write((int)tsl2561_addr << 1,(char *)data_to_send_1, 1, true);
-//    uint8_t data_to_receive_1[4];
-//    i2c0_read((int)tsl2561_addr << 1,(char *)data_to_receive_1, 2, false);
-//    uint16_t received_data_1 = ((uint16_t)data_to_receive_1[1] << 8) + data_to_receive_1[0];
-//    *broadband = received_data_1;
-
-    //Single bytes at a time
     i2c2_start();
     i2c2_byte_write(tsl2561_addr << 1);
     i2c2_byte_write(0x80 | 0x20 | 0x0c);
@@ -200,8 +95,6 @@ void getData (uint16_t *broadband, uint16_t *ir){
     uint8_t data_to_receive_1[2];
     i2c2_start();
     i2c2_byte_write(tsl2561_addr << 1 | 0x01);
-//    data_to_receive_1[0] = i2c2_byte_read(1);
-//    data_to_receive_1[1] = i2c2_byte_read(0);
     data_to_receive_1[0] = i2c2_byte_read(0);
     data_to_receive_1[1] = i2c2_byte_read(1);
     i2c2_stop();
@@ -211,17 +104,6 @@ void getData (uint16_t *broadband, uint16_t *ir){
     //----------------------------------------------------
     //- Reads a two byte value from channel 1 (infrared) -
     //----------------------------------------------------
-
-    //Multiple bytes at a time
-//    uint8_t data_to_send_2[4];
-//    data_to_send_2[0] = 0x80 | 0x20 | 0x0e;
-//    //i2c.write((int)tsl2561_addr << 1,(char *)data_to_send_2, 1, true);
-//    uint8_t data_to_receive_2[4];
-//    //i2c.read((int)tsl2561_addr << 1,(char *)data_to_receive_2, 2, false);
-//    uint16_t received_data_2 = ((uint16_t)data_to_receive_2[1] << 8) + data_to_receive_2[0];
-//    *ir = received_data_2;
-
-    //Single bytes at a time
     i2c2_start();
     i2c2_byte_write(tsl2561_addr << 1);
     i2c2_byte_write(0x80 | 0x20 | 0x0e);
@@ -229,8 +111,6 @@ void getData (uint16_t *broadband, uint16_t *ir){
     uint8_t data_to_receive_2[2];
     i2c2_start();
     i2c2_byte_write(tsl2561_addr << 1 | 0x01);
-//    data_to_receive_2[0] = i2c2_byte_read(1);
-//    data_to_receive_2[1] = i2c2_byte_read(0);
     data_to_receive_2[0] = i2c2_byte_read(0);
     data_to_receive_2[1] = i2c2_byte_read(1);
     i2c2_stop();
@@ -242,34 +122,14 @@ void getData (uint16_t *broadband, uint16_t *ir){
 }
 
 void getLuminosity (uint16_t *broadband, uint16_t *ir){
-	//printf("In getLuminosity()\r\n");
-    //bool valid = false;
     int valid = 0;
-
-    //printf("Get data with Auto gain\r\n");
-    /* Read data until we find a valid range */
-    //bool _agcCheck = false;
     int _agcCheck = 0;
+
     do {
         uint16_t _b, _ir;
         uint16_t _hi, _lo;
-        TSL2561IntegrationTime_t _it = _TSL2561IntegrationTime;
-
-        /* Get the hi/low threshold for the current integration time */
-        switch(_it) {
-            case TSL2561_INTEGRATIONTIME_13MS:
-                _hi = TSL2561_AGC_THI_13MS;
-                _lo = TSL2561_AGC_TLO_13MS;
-                break;
-            case TSL2561_INTEGRATIONTIME_101MS:
-                _hi = TSL2561_AGC_THI_101MS;
-                _lo = TSL2561_AGC_TLO_101MS;
-                break;
-            default:
-                _hi = TSL2561_AGC_THI_402MS;
-                _lo = TSL2561_AGC_TLO_402MS;
-                break;
-        }
+        _hi = TSL2561_AGC_THI_402MS;
+        _lo = TSL2561_AGC_TLO_402MS;
 
         getData(&_b, &_ir);
 
@@ -308,43 +168,35 @@ void getLuminosity (uint16_t *broadband, uint16_t *ir){
 }
 
 float getLux(void){
-    //printf("In getLux()\r\n");
     double lux0, lux1;
     double ratio;
     double dlux;
 
-    _TSL2561IntegrationTime = TSL2561_INTEGRATIONTIME_13MS;
-    _TSL2561Gain = TSL2561_GAIN_1X;
 
-    setIntegrationTime(_TSL2561IntegrationTime);
-    setGain(_TSL2561Gain);
     uint16_t x0, x1;
     getLuminosity(&x0, &x1);
     ch0 = x0;
     ch1 = x1;
-    //printf("ch0 = %d, ch1 = %d\r\n", ch0, ch1);
-    //printf("Integ. Time = %d, Gain %d\r\n",
-    //     _TSL2561IntegrationTime, _TSL2561Gain);
     lux0 = (double)ch0;
     lux1 = (double)ch1;
     ratio = lux1 / lux0;
-    readTimingReg();
+
     lux0 *= (402.0/(double)integ_time);
     lux1 *= (402.0/(double)integ_time);
     lux0 /= gain;
     lux1 /= gain;
-    //printf("Integ. Time = %f, Gain %d\r\n", integ_time, gain);
     if (ratio <= 0.5) {
         dlux = 0.03040 * lux0 - 0.06200 * lux0 * pow(ratio,1.4);
-    } else if (ratio <= 0.61) {
+    }else if (ratio <= 0.61) {
         dlux = 0.02240 * lux0 - 0.03100 * lux1;
-    } else if (ratio <= 0.80) {
+    }else if (ratio <= 0.80) {
         dlux = 0.01280 * lux0 - 0.01530 * lux1;
-    } else if (ratio <= 1.30) {
+    }else if (ratio <= 1.30) {
         dlux = 0.00146 * lux0 - 0.00112 * lux1;
-    } else {
+    }else {
         dlux = 0;
     }
+
     disable();
     return (float)dlux;
 }
