@@ -18,11 +18,22 @@ int main(void){
 		wait_s(1);
 	}*/
 	gui_getValue("Seconds between");
+	gui_getValue("Enter UNIX time");
 	/*
 	currentState = INIT;
     while(1){
     	stateMachine();
     }*/
+	/*
+	timer_init(1,1000000,1000);
+	//timer_setValue(1,1000);
+	timer_start(1);
+	lcd_printf("%i",timer_getValue(1));
+	wait_s(5);
+	lcd_printf("%i",timer_getValue(1));
+	wait_s(5);
+	lcd_printf("%i",timer_getValue(1));
+	*/
 }
 
 void stateMachine(void){
@@ -51,10 +62,11 @@ void stateMachine(void){
 		currentState = SETTIME;
 		break;
 	case SETTIME:
-		gui_getValue("Enter UNIX time");
+		timer_init(2,1000000,gui_getValue("Enter UNIX time"));
 		currentState = STARTTIMERS;
 		break;
 	case STARTTIMERS:
+		timer_start(2);
 		currentState = READSENSORVALUES;
 		break;
 	case READSENSORVALUES:
