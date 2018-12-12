@@ -31,7 +31,7 @@ void shiftRegister_write4bits(uint8_t byte){
 void shiftRegister_writeBit(uint8_t bit){
     mbedPin_write(bit,BUS_DATA);
     mbedPin_on(BUS_CLOCK);
-    wait_us(10);
+    wait_us(1);
     mbedPin_off(BUS_CLOCK);
-    wait_us(10);
+    wait_us(1);
 }

@@ -35,3 +35,47 @@ void wait_us(int us){
     //Wacht tot de timer gestopt is
     while (LPC_TIM0->TCR & 0x01){}
 }
+
+void timer_start(uint8_t number){
+	if(timer_isValid(number)){
+		LPC_TIM_TypeDef* timer=getTimerTypeDef(number);
+
+		//Timer standaard op systeemcoreclock/4 = 24MHz
+		//Reset de timer
+		timer->TCR = 0x02;
+
+		//Prescalar op 24 -> (SystemCoreClock/4)/1000000 = 24
+		timer->PR = (SystemCoreClock / 4) / 1000000;
+
+		//Start de timer
+		timer->TCR = 0x01;
+
+		//interrupt uitzetten
+		LPC_TIM0->MCR &= ~(0x01);
+	}
+}
+
+uint32_t timer_getValue(uint8_t number){
+	if(timer_isValid(number)){
+		//Return timer count
+		return getTimerTypeDef(number)->TC;
+	}
+}
+
+timer_isValid(uint8_t number){
+	return (number>=0)||(number<=3);
+}
+
+LPC_TIM_TypeDef* getTimerTypeDef(uint8_t number){
+	switch(number){
+	        case 0:
+	            return LPC_TIM0;
+	        case 1:
+	            return LPC_TIM1;
+	        case 2:
+	            return LPC_TIM2;
+	        case 3:
+	            return LPC_TIM3;
+	    }
+	    return 0;
+}
