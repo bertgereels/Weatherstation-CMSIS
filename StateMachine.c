@@ -50,10 +50,10 @@ void stateMachine(void){
 		}
 		break;
 	case INITFAIL:
-		lcd_setText("Initialisation  failed");
+		lcd_printf("Initialisation  failed");
 		wait_s(5);
 		lcd_cls();
-		lcd_setText("Initialisation  retry");
+		lcd_printf("Initialisation  retry");
 		wait_s(5);
 		currentState = INIT;
 		break;
@@ -74,7 +74,7 @@ void stateMachine(void){
 		printMeasurements(&meting);
 		char temp[32] = "";
 		measurementToString(temp, &meting);
-		lcd_setText(temp);
+		lcd_printf(temp);
 		currentState = IDLE;
 		break;
 	case IDLE:
