@@ -1,3 +1,10 @@
+/******************************************************
+* I2C master driver c code file						  *
+*                                                     *
+* Author:  Bert Gereels                               *
+*                                                     *
+******************************************************/
+
 #ifdef __USE_CMSIS
 #include "LPC17xx.h"
 #include "stdint.h"

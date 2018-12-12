@@ -1,3 +1,10 @@
+/******************************************************
+* TSL2561 driver c code file						  *
+*                                                     *
+* Author:  Bert Gereels                               *
+*                                                     *
+******************************************************/
+
 #include "TSL2561.h"
 
 // Delay for integration times

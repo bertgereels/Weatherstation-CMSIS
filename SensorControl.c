@@ -1,9 +1,16 @@
+/******************************************************
+* Sensor controller c code file						  *
+*                                                     *
+* Author:  Bert Gereels                               *
+*                                                     *
+******************************************************/
+
 #include "LPC17xx.h"
 #include "SensorControl.h"
 
 #include <cr_section_macros.h>
 
-int initSensors(void){
+uint8_t initSensors(void){
 	if((initTSL2561Sensor(TSL2561_GND_ADDR) == 0x8a) && initBME680Sensor(BME680_GND_ADDR) ){
 		return 1;
 	}

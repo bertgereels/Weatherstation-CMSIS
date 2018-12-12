@@ -1,3 +1,11 @@
+/******************************************************
+* Statemachine c code file						      *
+*                                                     *
+* Authors:  Bert Gereels                              *
+*           Klaas Govaerts                            *
+*           									      *
+******************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 
