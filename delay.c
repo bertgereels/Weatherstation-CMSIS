@@ -60,8 +60,10 @@ void timer_init(uint8_t number,uint32_t prescale_microseconds,uint32_t initialVa
 	if(timer_isValid(number)){
 		LPC_TIM_TypeDef* timer=getTimerTypeDef(number);
 
-		//Set counter and prescale counter to 0
+		//Set counter
 		timer->TC = initialValue;
+
+		//Set prescale counter to 0
 		timer->PC = 0;
 
 		//Set prescale
