@@ -21,12 +21,25 @@ typedef enum {
 BME680Addr_t;
 
 typedef enum {
-    BME680_OS_SKIPPED              = 0,    //SDO -> GND
-    BME680_OS_X1            	   = 1,    //SDO -> GND
-    BME680_OS_X2            	   = 2,    //SDO -> GND
-    BME680_OS_X4            	   = 3,    //SDO -> GND
-    BME680_OS_X8            	   = 4,    //SDO -> GND
-    BME680_OS_X16            	   = 5,    //SDO -> GND
+    BME680_SB_0_59               = 0,
+	BME680_SB_62_5               = 1,
+	BME680_SB_125                = 2,
+	BME680_SB_250                = 3,
+	BME680_SB_500                = 4,
+	BME680_SB_1000               = 5,
+	BME680_SB_10                 = 6,
+	BME680_SB_20               	 = 7,
+	BME680_SB_0               	 = 8,
+}
+BME680StandbyPeriod_t;
+
+typedef enum {
+    BME680_OS_SKIPPED              = 0,
+    BME680_OS_X1            	   = 1,
+    BME680_OS_X2            	   = 2,
+    BME680_OS_X4            	   = 3,
+    BME680_OS_X8            	   = 4,
+    BME680_OS_X16            	   = 5,
 }
 BME680OversamplingValues_t;
 
@@ -84,9 +97,9 @@ void setSequentialMode(void);
 /**
  *  Sets the time inbetween measurements
  *
- *  @param the value indicating the time inbetween: [0 - 8] [0.59,62.5,125,250,500,1000,10,20,no standby]
+ *  @param the value indicating the time inbetween: Possible values: see BME680StandbyPeriod_t typedef
  */
-void setStandByPeriod(int value);
+void setStandByPeriod(BME680StandbyPeriod_t value);
 
 /**
  *  Sets the oversampling values for temperature, pressure and humidity. This limits the amount of noise.

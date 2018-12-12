@@ -183,10 +183,10 @@ void writeRegister(uint8_t reg, uint8_t value){
 
 void setSequentialMode(){
     //Set stand-by time between measurements
-	setStandByPeriod(1);
+	setStandByPeriod(BME680_FC_1);
 
     //Set oversampling for T, P, H
-    setOversamplingValues(2,5,1);
+    setOversamplingValues(BME680_OS_X2,BME680_OS_X16,BME680_OS_X1);
 
     //SetIIR filter for pressure & temperature
     setIIRfilterCoefficient(BME680_FC_1);
@@ -198,7 +198,7 @@ void setSequentialMode(){
     writeRegister(0x74, data[0]);
 }
 
-void setStandByPeriod(int value){
+void setStandByPeriod(BME680StandbyPeriod_t value){
     readRegister(0x71,1);
     data[0] = (data[0] & 0x7F) | ((value & 0x0F) >> 3);
     writeRegister(0x71, data[0]);
