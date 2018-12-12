@@ -24,11 +24,10 @@ typedef enum {
 }
 TSL2561Gain_t;
 
-
 /**
  *  Initializes the TSL2561 sensor.
  *
- *  @param the I2C addres, if 'Addr' pin is connected to GND: 0x29; other values are 0x39 & 0x49
+ *  @param the I2C addres
  *
  *  @return value indicating if the sensor is initialized propery (should be 8a if everything is okay)
  */

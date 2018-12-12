@@ -80,7 +80,7 @@ static const int DIG_GH3_REG = 38;
 int8_t bme680_addr;
 uint8_t data[30];
 
-int initBME680Sensor(BME680Addr_t I2C_addr){
+uint8_t initBME680Sensor(BME680Addr_t I2C_addr){
 	bme680_addr = I2C_addr;
 
 	int statuscode = 0;
@@ -141,35 +141,32 @@ int initBME680Sensor(BME680Addr_t I2C_addr){
 
     setSequentialMode();
 
+    printf("The statuscode is %d\r\n", statuscode);
     return statuscode;
 }
 
-int getChipID(){
+uint8_t getChipID(){
     readRegister(0xD0, 1);
     return data[0];
 }
 
-void readRegister(int reg, int size){
-    //Byte write methods
+void readRegister(uint8_t reg, uint8_t size){
     i2c2_start();
     i2c2_byte_write(bme680_addr << 1); //1byte
     i2c2_byte_write(reg);
-    i2c2_stop(); //nieuw
+    i2c2_stop();
     i2c2_start();
     i2c2_byte_write(bme680_addr << 1 | 0x01);
 
     int i = 0;
     for (; i< size -1; i++){
-        //data[i] = i2c2_byte_read(1);
         data[i] = i2c2_byte_read(0);
     }
-    //data[i] = i2c2_byte_read(0);
     data[i] = i2c2_byte_read(1);
     i2c2_stop();
 }
 
-void writeRegister(int reg, int value){
-    //Byte write method
+void writeRegister(uint8_t reg, uint8_t value){
 	i2c2_start();
 	i2c2_byte_write(bme680_addr << 1);
 	i2c2_byte_write(reg);
@@ -185,18 +182,7 @@ void setSequentialMode(){
     setOversamplingValues(2,5,1);
 
     //SetIIR filter for pressure & temperature
-    setIIRfilterCoefficient(0);
-
-    //Enable gas coversion
-    enableGasConversion();
-
-    //Set heater set-points to be used
-    setHeaterSetPoints(1);
-
-    //Define heater-on times
-    //Convert durations to register codes
-    //Set gas_wait_x<7:0> (time base unit is ms)
-    setGasWaitTime(0,25,4);
+    setIIRfilterCoefficient(BME680_FC_1);
 
     //Set mode to sequential mode
     //Set mode<1:0> to 0b11
@@ -215,7 +201,7 @@ void setStandByPeriod(int value){
     writeRegister(0x75, data[0]);
 }
 
-void setOversamplingValues(int temp, int press, int humi){
+void setOversamplingValues(BME680OversamplingValues_t temp, BME680OversamplingValues_t press, BME680OversamplingValues_t humi){
 	//Set oversampling value for temperature
     readRegister(0x74,1);
     data[0] = (data[0] & 0x1F) | ((temp & 0x07) << 5);
@@ -232,28 +218,12 @@ void setOversamplingValues(int temp, int press, int humi){
     writeRegister(0x72, data[0]);
 }
 
-void setIIRfilterCoefficient(int value){
+void setIIRfilterCoefficient(BME680FilterCoeff_t value){
     readRegister(0x75,1);
     data[0] = (data[0] & 0xE3) | ((value & 0x07) << 2);
     writeRegister(0x75, data[0]);
 }
 
-void enableGasConversion(){
-    readRegister(0x71,1);
-    data[0] |= 0x10;
-    writeRegister(0x71, data[0]);
-}
-
-void setHeaterSetPoints(int value){
-    readRegister(0x71,1);
-    data[0] &= 0xF0;
-    data[0] |= 1 & 0x0F; //1 set-point
-    writeRegister(0x71, data[0]);
-}
-
-void setGasWaitTime(int setPoint, int time, int multiplication){
-    writeRegister(0x64 + setPoint, (multiplication << 6) | (time & 0x3F));
-}
 
 int32_t getTemperature(){
     readRegister(0x22 + 0 * 0x11, 3);
