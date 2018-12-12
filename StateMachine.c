@@ -6,9 +6,11 @@
 #include "TSL2561.h"
 #include "BME680.h"
 #include "SensorControl.h"
-#include "TextLCD.h"
+#include "LCDcontroller.h"
 #include "StateMachine.h"
 #include "delay.h"
+#include "TimerController.h"
+#include "GUIcontrol.h"
 
 int main(void){
 	/*
@@ -17,8 +19,8 @@ int main(void){
 		lcd_printf("%i",timer_getValue(1));
 		wait_s(1);
 	}*/
-	gui_getValue("Seconds between");
-	gui_getValue("Enter UNIX time");
+	//gui_getValue("Seconds between");
+	//gui_getValue("Enter UNIX time");
 	/*
 	currentState = INIT;
     while(1){
@@ -34,13 +36,21 @@ int main(void){
 	wait_s(5);
 	lcd_printf("%i",timer_getValue(1));
 	*/
+	lcd_printf("Begin");//
+	//unixTimer_init(1000);
+	timer_init(2,1000000,1000);
+	lcd_printf("Initialised");
+	unixTimer_start();
+	lcd_printf("Started");
+	lcd_printf("%i",unixTimer_getValue());
+	wait_s(5);
+	lcd_printf("%i",unixTimer_getValue());
 }
 
 void stateMachine(void){
 	switch(currentState){
 	case INIT:
 		//setRefreshPeriod(20);
-		lcd_init();
 		i2c2_init();
 		if(!initSensors() && i2c2_status() == 0xf8){
 			printf("Everything initialized succesfully!\r\n");
@@ -52,7 +62,6 @@ void stateMachine(void){
 	case INITFAIL:
 		lcd_printf("Initialisation  failed");
 		wait_s(5);
-		lcd_cls();
 		lcd_printf("Initialisation  retry");
 		wait_s(5);
 		currentState = INIT;
@@ -62,11 +71,11 @@ void stateMachine(void){
 		currentState = SETTIME;
 		break;
 	case SETTIME:
-		timer_init(2,1000000,gui_getValue("Enter UNIX time"));
+		unixTimer_init(gui_getValue("Enter UNIX time"));
 		currentState = STARTTIMERS;
 		break;
 	case STARTTIMERS:
-		timer_start(2);
+		unixTimer_start(2);
 		currentState = READSENSORVALUES;
 		break;
 	case READSENSORVALUES:
