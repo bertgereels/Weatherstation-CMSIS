@@ -4,14 +4,12 @@
 #include <cr_section_macros.h>
 
 int initSensors(void){
-	if((initTSL2561Sensor() == 0x8a) && initBME680Sensor() ){
+	if((initTSL2561Sensor(TSL2561_GND_ADDR) == 0x8a) && initBME680Sensor(BME680_GND_ADDR) ){
 		return 1;
 	}
 
 	return 0;
 }
-
-
 
 void getMeasurements(Measurements *structToStoreIn){
 	structToStoreIn->lightlevel = getLux();

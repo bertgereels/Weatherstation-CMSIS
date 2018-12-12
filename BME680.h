@@ -7,7 +7,13 @@
 #include <string.h>
 #include <math.h>
 
-int initBME680Sensor(void);
+typedef enum {
+    BME680_GND_ADDR              = 0x76,    //SDO -> GND
+	BME680_NC_ADDR               = 0x77,    //SDO -> not connected (floating)
+}
+BME680Addr_t;
+
+int initBME680Sensor(BME680Addr_t I2C_addr);
 int getChipID(void);
 void readRegister(int reg, int size);
 void writeRegister(int reg, int value);

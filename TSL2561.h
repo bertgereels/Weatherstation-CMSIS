@@ -7,6 +7,13 @@
 #include <math.h>
 
 typedef enum {
+    TSL2561_GND_ADDR              = 0x29,    //Addr -> GND
+	TSL2561_NC_ADDR               = 0x39,    //Addr -> not connected (floating)
+    TSL2561_VCC_ADDR              = 0x49,    //Addr -> VCC
+}
+TSL2561Addr_t;
+
+typedef enum {
     TSL2561_INTEGRATIONTIME_402MS = 0x02     // 402ms most accurate
 }
 TSL2561IntegrationTime_t;
@@ -21,9 +28,11 @@ TSL2561Gain_t;
 /**
  *  Initializes the TSL2561 sensor.
  *
+ *  @param the I2C addres, if 'Addr' pin is connected to GND: 0x29; other values are 0x39 & 0x49
+ *
  *  @return value indicating if the sensor is initialized propery (should be 8a if everything is okay)
  */
-uint8_t initTSL2561Sensor();
+uint8_t initTSL2561Sensor(TSL2561Addr_t I2C_addr);
 
 /**
  *	Enables the TSL2561 sensor by setting control bits to 0x03.

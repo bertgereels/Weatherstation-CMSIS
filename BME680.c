@@ -77,10 +77,12 @@ static const int DIG_GH2_MSB_REG = 36;
 static const int DIG_GH1_REG = 37;
 static const int DIG_GH3_REG = 38;
 
-int8_t bme680_addr = 0x76;
+int8_t bme680_addr;
 uint8_t data[30];
 
-int initBME680Sensor(){
+int initBME680Sensor(BME680Addr_t I2C_addr){
+	bme680_addr = I2C_addr;
+
 	int statuscode = 0;
 
     if (getChipID() != 0x61){
@@ -253,8 +255,6 @@ void setGasWaitTime(int setPoint, int time, int multiplication){
     writeRegister(0x64 + setPoint, (multiplication << 6) | (time & 0x3F));
 }
 
-
-
 int32_t getTemperature(){
     readRegister(0x22 + 0 * 0x11, 3);
     uint32_t v_uncomp_temperature_u32 =  (data[0] << 12) | (data[1] << 4) | (data[2] >> 4);
@@ -265,7 +265,6 @@ int32_t getTemperature(){
     t_fine = var2 + var3;
     return ((t_fine * 5) + 128) >> 8;
 }
-
 
 int32_t getPressure(){
     readRegister(0x1F + 0* 0x11, 3);

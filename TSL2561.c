@@ -19,7 +19,7 @@ int8_t gain;
 uint8_t dt[4];
 uint32_t ch0;
 uint32_t ch1;
-int8_t tsl2561_addr = 0x29;
+int8_t tsl2561_addr;
 
 void enable(void){
     i2c2_start();
@@ -38,7 +38,9 @@ void disable(void){
 }
 
 
-uint8_t initTSL2561Sensor(){
+uint8_t initTSL2561Sensor(TSL2561Addr_t I2C_addr){
+	tsl2561_addr = I2C_addr;
+
     uint8_t data[4];
     i2c2_start();
     i2c2_byte_write(tsl2561_addr << 1);
