@@ -1,24 +1,29 @@
+/******************************************************
+* Sensor controller c code file						  *
+*                                                     *
+* Author:  Bert Gereels                               *
+*                                                     *
+******************************************************/
+
 #include "LPC17xx.h"
 #include "SensorControl.h"
 
 #include <cr_section_macros.h>
 
-int initSensors(void){
-	if((initTSL2561Sensor() == 0x8a) && initBME680Sensor() ){
+uint8_t initSensors(void){
+	if((initTSL2561Sensor(TSL2561_GND_ADDR) == 0x8a) && initBME680Sensor(BME680_GND_ADDR) ){
 		return 1;
 	}
 
 	return 0;
 }
 
-
-
 void getMeasurements(Measurements *structToStoreIn){
 	structToStoreIn->lightlevel = getLux();
 	wait_ms(100);
-	structToStoreIn->humidity = getCompensatedHumidity()/1024;
-	structToStoreIn->pressure = getCompensatedPressure();
-	structToStoreIn->temperature = getCompensatedTemperature()/100;
+	structToStoreIn->humidity = getHumidity()/1024;
+	structToStoreIn->pressure = getPressure();
+	structToStoreIn->temperature = getTemperature()/100;
 }
 
 void printMeasurements(Measurements *measurementsToPrint){

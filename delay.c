@@ -1,3 +1,11 @@
+/******************************************************
+* Delay driver c code file						 	  *
+*                                                     *
+* Author:  Bert Gereels                               *
+*          Klaas Govaerts                             *
+*          										      *
+******************************************************/
+
 #include "delay.h"
 
 void wait_s(int s){

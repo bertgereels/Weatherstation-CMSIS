@@ -1,3 +1,10 @@
+/******************************************************
+* TSL2561 driver header file						  *
+*                                                     *
+* Author:  Bert Gereels                               *
+*                                                     *
+******************************************************/
+
 #ifndef TSL2561_H_
 #define TSL2561_H_
 
@@ -5,6 +12,13 @@
 #include "I2C.h"
 #include "delay.h"
 #include <math.h>
+
+typedef enum {
+    TSL2561_GND_ADDR              = 0x29,    //Addr -> GND
+	TSL2561_NC_ADDR               = 0x39,    //Addr -> not connected (floating)
+    TSL2561_VCC_ADDR              = 0x49,    //Addr -> VCC
+}
+TSL2561Addr_t;
 
 typedef enum {
     TSL2561_INTEGRATIONTIME_402MS = 0x02     // 402ms most accurate
@@ -17,13 +31,14 @@ typedef enum {
 }
 TSL2561Gain_t;
 
-
 /**
  *  Initializes the TSL2561 sensor.
  *
+ *  @param the I2C addres
+ *
  *  @return value indicating if the sensor is initialized propery (should be 8a if everything is okay)
  */
-uint8_t initTSL2561Sensor();
+uint8_t initTSL2561Sensor(TSL2561Addr_t I2C_addr);
 
 /**
  *	Enables the TSL2561 sensor by setting control bits to 0x03.

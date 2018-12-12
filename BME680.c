@@ -1,3 +1,10 @@
+/******************************************************
+* BME680 driver c code file						      *
+*                                                     *
+* Author:  Bert Gereels                               *
+*                                                     *
+******************************************************/
+
 #include "BME680.h"
 
 #define BME680_SLEEP_MODE               (0x00)
@@ -77,10 +84,12 @@ static const int DIG_GH2_MSB_REG = 36;
 static const int DIG_GH1_REG = 37;
 static const int DIG_GH3_REG = 38;
 
-int8_t bme680_addr = 0x76;
+int8_t bme680_addr;
 uint8_t data[30];
 
-int initBME680Sensor(){
+uint8_t initBME680Sensor(BME680Addr_t I2C_addr){
+	bme680_addr = I2C_addr;
+
 	int statuscode = 0;
 
     if (getChipID() != 0x61){
@@ -139,35 +148,32 @@ int initBME680Sensor(){
 
     setSequentialMode();
 
+    printf("The statuscode is %d\r\n", statuscode);
     return statuscode;
 }
 
-int getChipID(){
+uint8_t getChipID(){
     readRegister(0xD0, 1);
     return data[0];
 }
 
-void readRegister(int reg, int size){
-    //Byte write methods
+void readRegister(uint8_t reg, uint8_t size){
     i2c2_start();
     i2c2_byte_write(bme680_addr << 1); //1byte
     i2c2_byte_write(reg);
-    i2c2_stop(); //nieuw
+    i2c2_stop();
     i2c2_start();
     i2c2_byte_write(bme680_addr << 1 | 0x01);
 
     int i = 0;
     for (; i< size -1; i++){
-        //data[i] = i2c2_byte_read(1);
         data[i] = i2c2_byte_read(0);
     }
-    //data[i] = i2c2_byte_read(0);
     data[i] = i2c2_byte_read(1);
     i2c2_stop();
 }
 
-void writeRegister(int reg, int value){
-    //Byte write method
+void writeRegister(uint8_t reg, uint8_t value){
 	i2c2_start();
 	i2c2_byte_write(bme680_addr << 1);
 	i2c2_byte_write(reg);
@@ -176,34 +182,23 @@ void writeRegister(int reg, int value){
 }
 
 void setSequentialMode(){
-    //Select stand-by time between measurements
-    setWakePeriod(1);
+    //Set stand-by time between measurements
+	setStandByPeriod(BME680_FC_1);
 
-    //Select oversampling for T, P, H
-    setOversamplingTemperature(2);
-    setOversamplingPressure(5);
-    setOversamplingHumidity(1);
+    //Set oversampling for T, P, H
+    setOversamplingValues(BME680_OS_X2,BME680_OS_X16,BME680_OS_X1);
 
-    //Select IIR filter for pressure & temperature
-    setIIRfilterCoefficient(0);
-
-    //Enable gas coversion
-    runGasConversion();
-
-    //Select heater set-points to be used
-    setHeaterProfile(1);
-
-    //Define heater-on times
-    //Convert durations to register codes
-    //Set gas_wait_x<7:0> (time base unit is ms)
-    setGasWaitTime(0,25,4);
+    //SetIIR filter for pressure & temperature
+    setIIRfilterCoefficient(BME680_FC_1);
 
     //Set mode to sequential mode
     //Set mode<1:0> to 0b11
-    setMode(3);
+    readRegister(0x74,1);
+    data[0] = (data[0] & 0xFC) | (3 & 0x03);
+    writeRegister(0x74, data[0]);
 }
 
-void setWakePeriod(int value){
+void setStandByPeriod(BME680StandbyPeriod_t value){
     readRegister(0x71,1);
     data[0] = (data[0] & 0x7F) | ((value & 0x0F) >> 3);
     writeRegister(0x71, data[0]);
@@ -213,55 +208,33 @@ void setWakePeriod(int value){
     writeRegister(0x75, data[0]);
 }
 
-void setOversamplingTemperature(int value){
+void setOversamplingValues(BME680OversamplingValues_t temp, BME680OversamplingValues_t press, BME680OversamplingValues_t humi){
+	//Set oversampling value for temperature
     readRegister(0x74,1);
-    data[0] = (data[0] & 0x1F) | ((value & 0x07) << 5);
+    data[0] = (data[0] & 0x1F) | ((temp & 0x07) << 5);
     writeRegister(0x74, data[0]);
-}
 
-void setOversamplingPressure(int value){
+    //Set oversampling value for pressure
     readRegister(0x74,1);
-    data[0] = (data[0] & 0xE3) | ((value & 0x07) << 2);
+    data[0] = (data[0] & 0xE3) | ((press & 0x07) << 2);
     writeRegister(0x74, data[0]);
-}
 
-void setOversamplingHumidity(int value){
+    //Set oversampling value for humidity
     readRegister(0x72,1);
-    data[0] = (data[0] & 0xF8) | (value & 0x07);
+    data[0] = (data[0] & 0xF8) | (humi & 0x07);
     writeRegister(0x72, data[0]);
 }
 
-void setIIRfilterCoefficient(int value){
+void setIIRfilterCoefficient(BME680FilterCoeff_t value){
     readRegister(0x75,1);
     data[0] = (data[0] & 0xE3) | ((value & 0x07) << 2);
     writeRegister(0x75, data[0]);
 }
 
-void runGasConversion(){
-    readRegister(0x71,1);
-    data[0] |= 0x10;
-    writeRegister(0x71, data[0]);
-}
 
-void setHeaterProfile(int value){
-    readRegister(0x71,1);
-    data[0] &= 0xF0;
-    data[0] |= value & 0x0F;
-    writeRegister(0x71, data[0]);
-}
-
-void setGasWaitTime(int setPoint, int time, int multiplication){
-    writeRegister(0x64 + setPoint, (multiplication << 6) | (time & 0x3F));
-}
-
-void setMode(int mode){
-    readRegister(0x74,1);
-    data[0] = (data[0] & 0xFC) | (mode & 0x03);
-    writeRegister(0x74, data[0]);
-}
-
-int32_t getCompensatedTemperature(){
-    uint32_t v_uncomp_temperature_u32 = getUncompensatedTemp1Data();
+int32_t getTemperature(){
+    readRegister(0x22 + 0 * 0x11, 3);
+    uint32_t v_uncomp_temperature_u32 =  (data[0] << 12) | (data[1] << 4) | (data[2] >> 4);
 
     int32_t var1 = ((int32_t)v_uncomp_temperature_u32 >> 3) - ((int32_t)(par_T1 << 1));
     int32_t var2 = (var1 * (int32_t) par_T2) >> 11;
@@ -270,13 +243,9 @@ int32_t getCompensatedTemperature(){
     return ((t_fine * 5) + 128) >> 8;
 }
 
-uint32_t getUncompensatedTemp1Data(){
-    readRegister(0x22 + 0 * 0x11, 3);
-    return (data[0] << 12) | (data[1] << 4) | (data[2] >> 4);
-}
-
-int32_t getCompensatedPressure(){
-    uint32_t v_uncomp_pressure_u32 = getUncompensatedPressureData();
+int32_t getPressure(){
+    readRegister(0x1F + 0* 0x11, 3);
+    uint32_t v_uncomp_pressure_u32 = (data[0] << 12) | (data[1] << 4) | (data[2] >> 4);
 
     int32_t var1 = (((int32_t)t_fine) >> 1) - 64000;
     int32_t var2 = ((((var1 >> 2) * (var1 >> 2)) >> 11) * (int32_t)par_P6) >> 2;
@@ -308,13 +277,9 @@ int32_t getCompensatedPressure(){
     return pressure_comp;
 }
 
-uint32_t getUncompensatedPressureData(){
-    readRegister(0x1F + 0* 0x11, 3);
-    return (data[0] << 12) | (data[1] << 4) | (data[2] >> 4);
-}
-
-int32_t getCompensatedHumidity(){
-    uint32_t v_uncomp_humidity_u32 = getUncompensatedHumidityData();
+int32_t getHumidity(){
+    readRegister(0x25 + 0* 0x11, 2);
+    uint32_t v_uncomp_humidity_u32 =  (data[0] << 8) | data[1];
 
     int32_t temp_scaled = (t_fine * 5 + 128) >> 8;
     int32_t var1 = (int32_t)v_uncomp_humidity_u32 -
@@ -346,7 +311,3 @@ int32_t getCompensatedHumidity(){
     return humidity_comp;
 }
 
-uint32_t getUncompensatedHumidityData(){
-    readRegister(0x25 + 0* 0x11, 2);
-    return (data[0] << 8) | data[1];
-}
