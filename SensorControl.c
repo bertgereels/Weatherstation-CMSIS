@@ -16,9 +16,9 @@ int initSensors(void){
 void getMeasurements(Measurements *structToStoreIn){
 	structToStoreIn->lightlevel = getLux();
 	wait_ms(100);
-	structToStoreIn->humidity = getCompensatedHumidity()/1024;
-	structToStoreIn->pressure = getCompensatedPressure();
-	structToStoreIn->temperature = getCompensatedTemperature()/100;
+	structToStoreIn->humidity = getHumidity()/1024;
+	structToStoreIn->pressure = getPressure();
+	structToStoreIn->temperature = getTemperature()/100;
 }
 
 void printMeasurements(Measurements *measurementsToPrint){

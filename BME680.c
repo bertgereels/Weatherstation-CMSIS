@@ -176,22 +176,20 @@ void writeRegister(int reg, int value){
 }
 
 void setSequentialMode(){
-    //Select stand-by time between measurements
-    setWakePeriod(1);
+    //Set stand-by time between measurements
+	setStandByPeriod(1);
 
-    //Select oversampling for T, P, H
-    setOversamplingTemperature(2);
-    setOversamplingPressure(5);
-    setOversamplingHumidity(1);
+    //Set oversampling for T, P, H
+    setOversamplingValues(2,5,1);
 
-    //Select IIR filter for pressure & temperature
+    //SetIIR filter for pressure & temperature
     setIIRfilterCoefficient(0);
 
     //Enable gas coversion
-    runGasConversion();
+    enableGasConversion();
 
-    //Select heater set-points to be used
-    setHeaterProfile(1);
+    //Set heater set-points to be used
+    setHeaterSetPoints(1);
 
     //Define heater-on times
     //Convert durations to register codes
@@ -200,10 +198,12 @@ void setSequentialMode(){
 
     //Set mode to sequential mode
     //Set mode<1:0> to 0b11
-    setMode(3);
+    readRegister(0x74,1);
+    data[0] = (data[0] & 0xFC) | (3 & 0x03);
+    writeRegister(0x74, data[0]);
 }
 
-void setWakePeriod(int value){
+void setStandByPeriod(int value){
     readRegister(0x71,1);
     data[0] = (data[0] & 0x7F) | ((value & 0x0F) >> 3);
     writeRegister(0x71, data[0]);
@@ -213,21 +213,20 @@ void setWakePeriod(int value){
     writeRegister(0x75, data[0]);
 }
 
-void setOversamplingTemperature(int value){
+void setOversamplingValues(int temp, int press, int humi){
+	//Set oversampling value for temperature
     readRegister(0x74,1);
-    data[0] = (data[0] & 0x1F) | ((value & 0x07) << 5);
+    data[0] = (data[0] & 0x1F) | ((temp & 0x07) << 5);
     writeRegister(0x74, data[0]);
-}
 
-void setOversamplingPressure(int value){
+    //Set oversampling value for pressure
     readRegister(0x74,1);
-    data[0] = (data[0] & 0xE3) | ((value & 0x07) << 2);
+    data[0] = (data[0] & 0xE3) | ((press & 0x07) << 2);
     writeRegister(0x74, data[0]);
-}
 
-void setOversamplingHumidity(int value){
+    //Set oversampling value for humidity
     readRegister(0x72,1);
-    data[0] = (data[0] & 0xF8) | (value & 0x07);
+    data[0] = (data[0] & 0xF8) | (humi & 0x07);
     writeRegister(0x72, data[0]);
 }
 
@@ -237,16 +236,16 @@ void setIIRfilterCoefficient(int value){
     writeRegister(0x75, data[0]);
 }
 
-void runGasConversion(){
+void enableGasConversion(){
     readRegister(0x71,1);
     data[0] |= 0x10;
     writeRegister(0x71, data[0]);
 }
 
-void setHeaterProfile(int value){
+void setHeaterSetPoints(int value){
     readRegister(0x71,1);
     data[0] &= 0xF0;
-    data[0] |= value & 0x0F;
+    data[0] |= 1 & 0x0F; //1 set-point
     writeRegister(0x71, data[0]);
 }
 
@@ -254,14 +253,11 @@ void setGasWaitTime(int setPoint, int time, int multiplication){
     writeRegister(0x64 + setPoint, (multiplication << 6) | (time & 0x3F));
 }
 
-void setMode(int mode){
-    readRegister(0x74,1);
-    data[0] = (data[0] & 0xFC) | (mode & 0x03);
-    writeRegister(0x74, data[0]);
-}
 
-int32_t getCompensatedTemperature(){
-    uint32_t v_uncomp_temperature_u32 = getUncompensatedTemp1Data();
+
+int32_t getTemperature(){
+    readRegister(0x22 + 0 * 0x11, 3);
+    uint32_t v_uncomp_temperature_u32 =  (data[0] << 12) | (data[1] << 4) | (data[2] >> 4);
 
     int32_t var1 = ((int32_t)v_uncomp_temperature_u32 >> 3) - ((int32_t)(par_T1 << 1));
     int32_t var2 = (var1 * (int32_t) par_T2) >> 11;
@@ -270,13 +266,10 @@ int32_t getCompensatedTemperature(){
     return ((t_fine * 5) + 128) >> 8;
 }
 
-uint32_t getUncompensatedTemp1Data(){
-    readRegister(0x22 + 0 * 0x11, 3);
-    return (data[0] << 12) | (data[1] << 4) | (data[2] >> 4);
-}
 
-int32_t getCompensatedPressure(){
-    uint32_t v_uncomp_pressure_u32 = getUncompensatedPressureData();
+int32_t getPressure(){
+    readRegister(0x1F + 0* 0x11, 3);
+    uint32_t v_uncomp_pressure_u32 = (data[0] << 12) | (data[1] << 4) | (data[2] >> 4);
 
     int32_t var1 = (((int32_t)t_fine) >> 1) - 64000;
     int32_t var2 = ((((var1 >> 2) * (var1 >> 2)) >> 11) * (int32_t)par_P6) >> 2;
@@ -308,13 +301,9 @@ int32_t getCompensatedPressure(){
     return pressure_comp;
 }
 
-uint32_t getUncompensatedPressureData(){
-    readRegister(0x1F + 0* 0x11, 3);
-    return (data[0] << 12) | (data[1] << 4) | (data[2] >> 4);
-}
-
-int32_t getCompensatedHumidity(){
-    uint32_t v_uncomp_humidity_u32 = getUncompensatedHumidityData();
+int32_t getHumidity(){
+    readRegister(0x25 + 0* 0x11, 2);
+    uint32_t v_uncomp_humidity_u32 =  (data[0] << 8) | data[1];
 
     int32_t temp_scaled = (t_fine * 5 + 128) >> 8;
     int32_t var1 = (int32_t)v_uncomp_humidity_u32 -
@@ -346,7 +335,3 @@ int32_t getCompensatedHumidity(){
     return humidity_comp;
 }
 
-uint32_t getUncompensatedHumidityData(){
-    readRegister(0x25 + 0* 0x11, 2);
-    return (data[0] << 8) | data[1];
-}

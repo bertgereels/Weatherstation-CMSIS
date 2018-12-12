@@ -12,20 +12,15 @@ int getChipID(void);
 void readRegister(int reg, int size);
 void writeRegister(int reg, int value);
 void setSequentialMode(void);
-void setWakePeriod(int value);
-void setOversamplingTemperature(int value);
-void setOversamplingPressure(int value);
-void setOversamplingHumidity(int value);
-void setIIRfilterCoefficient(int value);
-void runGasConversion();
-void setHeaterProfile(int value);
+void setStandByPeriod(int value);
+void setOversamplingValues(int temp, int press, int humi);
+void enableGasConversion(void);
+void setHeaterSetPoints(int value);
 void setGasWaitTime(int setPoint, int time, int multiplication);
-void setMode(int mode);
-int32_t getCompensatedTemperature(void);
-uint32_t getUncompensatedTemp1Data(void);
-int32_t getCompensatedPressure(void);
-uint32_t getUncompensatedPressureData(void);
-int32_t getCompensatedHumidity(void);
-uint32_t getUncompensatedHumidityData(void);
+void setIIRfilterCoefficient(int value);
+
+int32_t getTemperature(void);
+int32_t getPressure(void);
+int32_t getHumidity(void);
 
 #endif
