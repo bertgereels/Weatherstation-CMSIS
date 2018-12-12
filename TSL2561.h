@@ -7,9 +7,7 @@
 #include <math.h>
 
 typedef enum {
-    TSL2561_INTEGRATIONTIME_13MS  = 0x00,    // 13.7ms
-    TSL2561_INTEGRATIONTIME_101MS = 0x01,    // 101ms
-    TSL2561_INTEGRATIONTIME_402MS = 0x02     // 402ms
+    TSL2561_INTEGRATIONTIME_402MS = 0x02     // 402ms most accurate
 }
 TSL2561IntegrationTime_t;
 
@@ -51,13 +49,6 @@ void setIntegrationTime(TSL2561IntegrationTime_t time);
  *  @param The new gain value, stored in a typedef.
  */
 void setGain(TSL2561Gain_t gain);
-
-/**
- *  Reads the TSL2561 timing register.
- *
- *  @return the value of the TSL2561 timing register
- */
-uint8_t readTimingReg(void);
 
 /**
  *  Reads luminosity on both channels of the TSL2561.

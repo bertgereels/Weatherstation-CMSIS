@@ -46,6 +46,14 @@ uint8_t initTSL2561Sensor(){
     data[0] = i2c2_byte_read(0);
     i2c2_stop();
 
+    integ_time = 402.0;
+    _TSL2561IntegrationTime = TSL2561_INTEGRATIONTIME_402MS;
+    gain = 1;
+    _TSL2561Gain = TSL2561_GAIN_1X;
+
+    setIntegrationTime(_TSL2561IntegrationTime);
+    setGain(_TSL2561Gain);
+
     return data[0];
 }
 
@@ -71,43 +79,11 @@ void setGain(TSL2561Gain_t gain){
     disable();
 }
 
-uint8_t readTimingReg(void){
-    uint8_t data;
-    i2c2_start();
-    i2c2_byte_write(tsl2561_addr << 1);
-    i2c2_byte_write(0x80 | 0x01);
-    data = i2c2_byte_read(0);
-    i2c2_stop();
-
-    if (data & TSL2561_GAIN_16X) {
-        gain = 16;
-        _TSL2561Gain = TSL2561_GAIN_16X;
-    } else {
-        gain = 1;
-        _TSL2561Gain = TSL2561_GAIN_1X;
-    }
-
-    integ_time = 101.0;
-   _TSL2561IntegrationTime = TSL2561_INTEGRATIONTIME_101MS;
-
-    return dt[0];
-}
-
 void getData (uint16_t *broadband, uint16_t *ir){
     enable();
 
     /* Wait x ms for ADC to complete */
-    switch (_TSL2561IntegrationTime) {
-        case TSL2561_INTEGRATIONTIME_13MS:
-            wait_ms(TSL2561_DELAY_INTTIME_13MS);
-            break;
-        case TSL2561_INTEGRATIONTIME_101MS:
-            wait_ms(TSL2561_DELAY_INTTIME_101MS);
-            break;
-        default:
-            wait_ms(TSL2561_DELAY_INTTIME_402MS);
-            break;
-    }
+    wait_ms(TSL2561_DELAY_INTTIME_402MS);
 
     //--------------------------------------------------------------
     //- Reads a two byte value from channel 0 (visible + infrared) -
@@ -148,26 +124,12 @@ void getData (uint16_t *broadband, uint16_t *ir){
 void getLuminosity (uint16_t *broadband, uint16_t *ir){
     int valid = 0;
     int _agcCheck = 0;
+
     do {
         uint16_t _b, _ir;
         uint16_t _hi, _lo;
-        TSL2561IntegrationTime_t _it = _TSL2561IntegrationTime;
-
-        /* Get the hi/low threshold for the current integration time */
-        switch(_it) {
-            case TSL2561_INTEGRATIONTIME_13MS:
-                _hi = TSL2561_AGC_THI_13MS;
-                _lo = TSL2561_AGC_TLO_13MS;
-                break;
-            case TSL2561_INTEGRATIONTIME_101MS:
-                _hi = TSL2561_AGC_THI_101MS;
-                _lo = TSL2561_AGC_TLO_101MS;
-                break;
-            default:
-                _hi = TSL2561_AGC_THI_402MS;
-                _lo = TSL2561_AGC_TLO_402MS;
-                break;
-        }
+        _hi = TSL2561_AGC_THI_402MS;
+        _lo = TSL2561_AGC_TLO_402MS;
 
         getData(&_b, &_ir);
 
@@ -210,11 +172,7 @@ float getLux(void){
     double ratio;
     double dlux;
 
-    _TSL2561IntegrationTime = TSL2561_INTEGRATIONTIME_13MS;
-    _TSL2561Gain = TSL2561_GAIN_1X;
 
-    setIntegrationTime(_TSL2561IntegrationTime);
-    setGain(_TSL2561Gain);
     uint16_t x0, x1;
     getLuminosity(&x0, &x1);
     ch0 = x0;
@@ -222,22 +180,23 @@ float getLux(void){
     lux0 = (double)ch0;
     lux1 = (double)ch1;
     ratio = lux1 / lux0;
-    readTimingReg();
+
     lux0 *= (402.0/(double)integ_time);
     lux1 *= (402.0/(double)integ_time);
     lux0 /= gain;
     lux1 /= gain;
     if (ratio <= 0.5) {
         dlux = 0.03040 * lux0 - 0.06200 * lux0 * pow(ratio,1.4);
-    } else if (ratio <= 0.61) {
+    }else if (ratio <= 0.61) {
         dlux = 0.02240 * lux0 - 0.03100 * lux1;
-    } else if (ratio <= 0.80) {
+    }else if (ratio <= 0.80) {
         dlux = 0.01280 * lux0 - 0.01530 * lux1;
-    } else if (ratio <= 1.30) {
+    }else if (ratio <= 1.30) {
         dlux = 0.00146 * lux0 - 0.00112 * lux1;
-    } else {
+    }else {
         dlux = 0;
     }
+
     disable();
     return (float)dlux;
 }
