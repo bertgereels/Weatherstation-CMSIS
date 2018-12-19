@@ -5,7 +5,12 @@
 *           Klaas Govaerts                            *
 *           									      *
 ******************************************************/
+#include "LPC17xx.h"
 
+#include "SensorControl.h"
+#include "TextLCD.h"
+#include "StateMachine.h"
+#include "delay.h"
 #include <stdio.h>
 #include <stdlib.h>
 
