@@ -1,3 +1,11 @@
+/******************************************************
+* Button controller header file		         		  *
+*                                                     *
+* Author:  Klaas Govaerts                             *
+*                                                     *
+*           										  *
+******************************************************/
+
 #include "ButtonControl.h"
 #include "GPIOdriver.h"
 

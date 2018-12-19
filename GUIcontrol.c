@@ -19,13 +19,14 @@ int32_t gui_getValue(const char *query){
     char setting[11]="0000000000";
     char settingBlinking[11];
     wait_ms(200);
+    timer_init(1,1,0);
     timer_start(1);
     while(1){
         Command command=NONE;
         while(command==NONE){
         	if(timer_getValue(1)>=250000){
         		blinkingOn= !blinkingOn;
-        		timer_start(1);
+        		timer_setValue(1,0);
         		if(blinkingOn){
         			lcd_printf("%s\n     %s",query,setting);
         		 } else {

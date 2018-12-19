@@ -44,6 +44,7 @@ void wait_us(int us){
     while (LPC_TIM0->TCR & 0x01){}
 }
 
+/*
 void timer_start(uint8_t number){
 	if(timer_isValid(number)){
 		LPC_TIM_TypeDef* timer=getTimerTypeDef(number);
@@ -59,7 +60,31 @@ void timer_start(uint8_t number){
 		timer->TCR = 0x01;
 
 		//interrupt uitzetten
-		LPC_TIM0->MCR &= ~(0x01);
+		timer->MCR &= ~(0x01);
+	}
+}*/
+
+void timer_init(uint8_t number,uint32_t prescale_microseconds,uint32_t initialValue){
+	if(timer_isValid(number)){
+		LPC_TIM_TypeDef* timer=getTimerTypeDef(number);
+
+		//Set counter
+		timer->TC = initialValue;
+
+		//Set prescale counter to 0
+		timer->PC = 0;
+
+		//Set prescale
+		timer->PR=((SystemCoreClock / 4) / 1000000)*prescale_microseconds;
+
+		//interrupt uitzetten
+		timer->MCR &= ~(0x01);
+	}
+}
+
+void timer_start(uint8_t number){
+	if(timer_isValid(number)){
+		getTimerTypeDef(number)->TCR = 0x01;
 	}
 }
 
@@ -67,6 +92,13 @@ uint32_t timer_getValue(uint8_t number){
 	if(timer_isValid(number)){
 		//Return timer count
 		return getTimerTypeDef(number)->TC;
+	}
+}
+
+void timer_setValue(uint8_t number,uint32_t value){
+	if(timer_isValid(number)){
+		//set timer count
+		getTimerTypeDef(number)->TC=value;
 	}
 }
 
