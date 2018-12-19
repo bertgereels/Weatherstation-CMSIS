@@ -9,15 +9,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "LPC17xx.h"
-#include "I2C.h"
-#include "TSL2561.h"
-#include "BME680.h"
-#include "SensorControl.h"
-#include "TextLCD.h"
-#include "StateMachine.h"
-#include "delay.h"
-
 int main(void){
 	currentState = INIT;
     while(1){

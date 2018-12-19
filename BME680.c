@@ -29,11 +29,6 @@ int8_t  par_H4;/**<calibration H4 data*/
 int8_t  par_H5;/**<calibration H5 data*/
 uint8_t  par_H6;/**<calibration H6 data*/
 int8_t  par_H7;/**<calibration H7 data*/
-int8_t  par_GH1;/**<calibration GH1 data*/
-uint8_t  res_heat_range;/**<resistance calculation*/
-int8_t  res_heat_val; /**<correction factor*/
-int8_t  range_switching_error;/**<range switching error*/
-int16_t par_GH2;/**<calibration GH2 data*/
 uint16_t par_T1;/**<calibration T1 data*/
 int16_t par_T2;/**<calibration T2 data*/
 uint16_t par_P1;/**<calibration P1 data*/
@@ -45,7 +40,6 @@ int16_t par_P9;/**<calibration P9 data*/
 uint16_t par_H1;/**<calibration H1 data*/
 uint16_t par_H2;/**<calibration H2 data*/
 int32_t t_fine;/**<calibration T_FINE data*/
-int8_t  par_GH3;/**<calibration GH3 data*/
 
 static const int BME680_BIT_MASK_H1_DATA = 0x0F;
 
@@ -79,10 +73,6 @@ static const int DIG_H6_REG = 31;
 static const int DIG_H7_REG = 32;
 static const int DIG_T1_LSB_REG = 33;
 static const int DIG_T1_MSB_REG = 34;
-static const int DIG_GH2_LSB_REG = 35;
-static const int DIG_GH2_MSB_REG = 36;
-static const int DIG_GH1_REG = 37;
-static const int DIG_GH3_REG = 38;
 
 int8_t bme680_addr;
 uint8_t data[30];
@@ -128,23 +118,6 @@ uint8_t initBME680Sensor(BME680Addr_t I2C_addr){
     par_H5 = cali[DIG_H5_REG];
     par_H6 = cali[DIG_H6_REG];
     par_H7 = cali[DIG_H7_REG];
-
-    /* read gas calibration*/
-    par_GH1 = cali[DIG_GH1_REG];
-    par_GH2 = (cali[DIG_GH2_MSB_REG] <<8) | cali[DIG_GH2_LSB_REG];
-    par_GH3 = cali[DIG_GH3_REG];
-
-    /**<resistance calculation*/
-    readRegister(0x02, 1);
-    res_heat_range = (data[0] >> 4) & 0x03;
-
-    /**<correction factor*/
-    readRegister(0x00, 1);
-    res_heat_val = data[0];
-
-    /**<range switching error*/
-    readRegister(0x04, 1);
-    range_switching_error = (data[0] & 0xF0) >> 4;
 
     setSequentialMode();
 
