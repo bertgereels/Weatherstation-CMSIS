@@ -1,5 +1,5 @@
 /******************************************************
-* TSL2561 driver c code file						  *
+* TSL2561 driver c code file						              *
 *                                                     *
 * Author:  Bert Gereels                               *
 *                                                     *
@@ -31,16 +31,16 @@ int8_t tsl2561_addr;
 void enable(void){
     i2c2_start();
     i2c2_byte_write(tsl2561_addr << 1);
-    i2c2_byte_write(0x80 | 0x00);
-    i2c2_byte_write(0x03);
+    i2c2_byte_write(0x80 | 0x00); //0x80 = command bit
+    i2c2_byte_write(0x03); //0x03 = Power ON
     i2c2_stop();
 }
 
 void disable(void){
     i2c2_start();
     i2c2_byte_write(tsl2561_addr << 1);
-    i2c2_byte_write(0x80 | 0x00);
-    i2c2_byte_write(0x00);
+    i2c2_byte_write(0x80 | 0x00); //0x80 = command bit
+    i2c2_byte_write(0x00); //0x00 = Power OFF
     i2c2_stop();
 }
 
@@ -51,7 +51,7 @@ uint8_t initTSL2561Sensor(TSL2561Addr_t I2C_addr){
     uint8_t data[4];
     i2c2_start();
     i2c2_byte_write(tsl2561_addr << 1);
-    i2c2_byte_write(0x80 | 0x0A);
+    i2c2_byte_write(0x80 | 0x0A); //request sensor ID, used to verify correct initialisation
     data[0] = i2c2_byte_read(0);
     i2c2_stop();
 
@@ -70,7 +70,7 @@ void setIntegrationTime(TSL2561IntegrationTime_t time){
     enable();
     i2c2_start();
     i2c2_byte_write(tsl2561_addr << 1);
-    i2c2_byte_write(0x80 | 0x01);
+    i2c2_byte_write(0x80 | 0x01); //0x01 Timing Control
     i2c2_byte_write(time | TSL2561_GAIN_1X);
     i2c2_stop();
     _TSL2561IntegrationTime = time;
@@ -81,7 +81,7 @@ void setGain(TSL2561Gain_t gain){
     enable();
     i2c2_start();
     i2c2_byte_write(tsl2561_addr << 1);
-    i2c2_byte_write(0x80 | 0x01);
+    i2c2_byte_write(0x80 | 0x01); //0x01 Timing Control
     i2c2_byte_write(_TSL2561IntegrationTime | gain);
     i2c2_stop();
     _TSL2561Gain = gain;
@@ -99,13 +99,13 @@ void getData (uint16_t *broadband, uint16_t *ir){
     //--------------------------------------------------------------
     i2c2_start();
     i2c2_byte_write(tsl2561_addr << 1);
-    i2c2_byte_write(0x80 | 0x20 | 0x0c);
+    i2c2_byte_write(0x80 | 0x20 | 0x0c); //Address Ch0
     i2c2_stop();
-    uint8_t data_to_receive_1[2];
+    uint8_t data_to_receive_1[2]; //We expect two data bytes
     i2c2_start();
     i2c2_byte_write(tsl2561_addr << 1 | 0x01);
-    data_to_receive_1[0] = i2c2_byte_read(0);
-    data_to_receive_1[1] = i2c2_byte_read(1);
+    data_to_receive_1[0] = i2c2_byte_read(0); //CH0 lower data register
+    data_to_receive_1[1] = i2c2_byte_read(1); //CH0 upper data register
     i2c2_stop();
     uint16_t received_data_1 = ((uint16_t)data_to_receive_1[1] << 8) + data_to_receive_1[0];
     *broadband = received_data_1;
@@ -115,18 +115,18 @@ void getData (uint16_t *broadband, uint16_t *ir){
     //----------------------------------------------------
     i2c2_start();
     i2c2_byte_write(tsl2561_addr << 1);
-    i2c2_byte_write(0x80 | 0x20 | 0x0e);
+    i2c2_byte_write(0x80 | 0x20 | 0x0e); //Address Ch1
     i2c2_stop();
-    uint8_t data_to_receive_2[2];
+    uint8_t data_to_receive_2[2];  //We expect two data bytes
     i2c2_start();
     i2c2_byte_write(tsl2561_addr << 1 | 0x01);
-    data_to_receive_2[0] = i2c2_byte_read(0);
-    data_to_receive_2[1] = i2c2_byte_read(1);
+    data_to_receive_2[0] = i2c2_byte_read(0); //CH1 lower data register
+    data_to_receive_2[1] = i2c2_byte_read(1); //CH1 upper data register
     i2c2_stop();
     uint16_t received_data_2 = ((uint16_t)data_to_receive_2[1] << 8) + data_to_receive_2[0];
     *ir = received_data_2;
 
-    /* Turn the device off to save power */
+    //Save power
     disable();
 }
 
@@ -190,6 +190,7 @@ float getLux(void){
     lux1 = (double)ch1;
     ratio = lux1 / lux0;
 
+    //Algorithm as described in TSL2561 datasheet
     lux0 *= (402.0/(double)integ_time);
     lux1 *= (402.0/(double)integ_time);
     lux0 /= gain;
