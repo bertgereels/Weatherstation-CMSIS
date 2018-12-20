@@ -1,5 +1,5 @@
 /******************************************************
-* BME680 driver c code file						      *
+* BME680 driver c code file						      					*
 *                                                     *
 * Author:  Bert Gereels                               *
 *                                                     *
@@ -156,7 +156,7 @@ void writeRegister(uint8_t reg, uint8_t value){
 
 void setSequentialMode(){
     //Set stand-by time between measurements
-	setStandByPeriod(BME680_FC_1);
+		setStandByPeriod(BME680_FC_1);
 
     //Set oversampling for T, P, H
     setOversamplingValues(BME680_OS_X2,BME680_OS_X16,BME680_OS_X1);
@@ -166,39 +166,46 @@ void setSequentialMode(){
 
     //Set mode to sequential mode
     //Set mode<1:0> to 0b11
+		//0x74 = Mode selection register
     readRegister(0x74,1);
     data[0] = (data[0] & 0xFC) | (3 & 0x03);
     writeRegister(0x74, data[0]);
 }
 
 void setStandByPeriod(BME680StandbyPeriod_t value){
+		//0x71 = Gas Control register
     readRegister(0x71,1);
     data[0] = (data[0] & 0x7F) | ((value & 0x0F) >> 3);
     writeRegister(0x71, data[0]);
 
+		//0x75 = IIR Filter control register
     readRegister(0x75,1);
     data[0] = (data[0] & 0x1F) | ((value & 0x07) << 5);
     writeRegister(0x75, data[0]);
 }
 
 void setOversamplingValues(BME680OversamplingValues_t temp, BME680OversamplingValues_t press, BME680OversamplingValues_t humi){
-	//Set oversampling value for temperature
+		//Set oversampling value for temperature
+		//0x74 = Oversampling control register for temperature
     readRegister(0x74,1);
     data[0] = (data[0] & 0x1F) | ((temp & 0x07) << 5);
     writeRegister(0x74, data[0]);
 
     //Set oversampling value for pressure
+		//0x74 = Oversampling control register for pressure
     readRegister(0x74,1);
     data[0] = (data[0] & 0xE3) | ((press & 0x07) << 2);
     writeRegister(0x74, data[0]);
 
     //Set oversampling value for humidity
+		//0x74 = Oversampling control register for humidity
     readRegister(0x72,1);
     data[0] = (data[0] & 0xF8) | (humi & 0x07);
     writeRegister(0x72, data[0]);
 }
 
 void setIIRfilterCoefficient(BME680FilterCoeff_t value){
+		//0x75 = IIR Filter control register
     readRegister(0x75,1);
     data[0] = (data[0] & 0xE3) | ((value & 0x07) << 2);
     writeRegister(0x75, data[0]);
@@ -206,6 +213,7 @@ void setIIRfilterCoefficient(BME680FilterCoeff_t value){
 
 
 int32_t getTemperature(){
+		//0x22 = MSB of temperature raw data
     readRegister(0x22 + 0 * 0x11, 3);
     uint32_t v_uncomp_temperature_u32 =  (data[0] << 12) | (data[1] << 4) | (data[2] >> 4);
 
@@ -217,6 +225,7 @@ int32_t getTemperature(){
 }
 
 int32_t getPressure(){
+		//0x1F = MSB of pressure raw data
     readRegister(0x1F + 0* 0x11, 3);
     uint32_t v_uncomp_pressure_u32 = (data[0] << 12) | (data[1] << 4) | (data[2] >> 4);
 
@@ -251,6 +260,7 @@ int32_t getPressure(){
 }
 
 int32_t getHumidity(){
+		//MSB of humidity raw data
     readRegister(0x25 + 0* 0x11, 2);
     uint32_t v_uncomp_humidity_u32 =  (data[0] << 8) | data[1];
 
@@ -283,4 +293,3 @@ int32_t getHumidity(){
 
     return humidity_comp;
 }
-
