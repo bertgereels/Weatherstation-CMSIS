@@ -1,3 +1,10 @@
+/******************************************************
+* SerialWriter c code file				      		          *
+*                                                     *
+* Authors:  Klaas Govaerts                            *
+*                                                     *
+******************************************************/
+
 #include "GPIOdriver.h"
 #include "ICdriver.h"
 #include "SerialWriter.h"

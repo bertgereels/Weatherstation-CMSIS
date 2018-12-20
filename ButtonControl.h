@@ -1,3 +1,10 @@
+/******************************************************
+* Button Control header file				      		        *
+*                                                     *
+* Authors:  Klaas Govaerts                            *
+*                                                     *
+******************************************************/
+
 #ifndef BUTTONCONTROL_H
 #define BUTTONCONTROL_H
 

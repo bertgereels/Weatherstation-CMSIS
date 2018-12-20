@@ -1,3 +1,11 @@
+/******************************************************
+* IC Driver c code file				      		              *
+*                                                     *
+* Authors:  Klaas Govaerts                            *
+*                                                     *
+******************************************************/
+
+
 #include "ICdriver.h"
 #include "GPIOdriver.h"
 

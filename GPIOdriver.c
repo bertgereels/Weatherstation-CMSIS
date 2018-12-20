@@ -1,3 +1,10 @@
+/******************************************************
+* GPIO Driver c code file				      		            *
+*                                                     *
+* Authors:  Klaas Govaerts                            *
+*                                                     *
+******************************************************/
+
 #include "LPC17xx.h"
 #include "GPIOdriver.h"
 

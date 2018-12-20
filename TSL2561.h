@@ -1,5 +1,5 @@
 /******************************************************
-* TSL2561 driver header file						  *
+* TSL2561 driver header file						              *
 *                                                     *
 * Author:  Bert Gereels                               *
 *                                                     *

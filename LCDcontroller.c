@@ -1,3 +1,10 @@
+/******************************************************
+* LCD Control c code file				      		            *
+*                                                     *
+* Authors:  Klaas Govaerts                            *
+*                                                     *
+******************************************************/
+
 #include "TextLCD.h"
 #include "LCDcontroller.h"
 #include <stdarg.h>
@@ -8,12 +15,12 @@ void lcd_printf(const char *format, ...){
     static int initialized=0;
     char output[34];
     va_list args;
-    
+
     if(!initialized){
         lcd_init();
         initialized=1;
     }
-    
+
     //int formatSpecifiers=countPercent(format);
     va_start(args,format);
     vsnprintf(output, sizeof(output), format, args);

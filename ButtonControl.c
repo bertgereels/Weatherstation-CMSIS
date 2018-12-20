@@ -1,3 +1,10 @@
+/******************************************************
+* Button Control c code file				      		        *
+*                                                     *
+* Authors:  Klaas Govaerts                            *
+*                                                     *
+******************************************************/
+
 #include "ButtonControl.h"
 #include "GPIOdriver.h"
 

@@ -1,3 +1,10 @@
+/******************************************************
+* LCD Control header file				      		            *
+*                                                     *
+* Authors:  Klaas Govaerts                            *
+*                                                     *
+******************************************************/
+
 #ifndef LCDCONTROLLER_H
 #define LCDCONTROLLER_H
 

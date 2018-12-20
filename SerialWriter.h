@@ -1,3 +1,10 @@
+/******************************************************
+* SerialWriter header file				      		          *
+*                                                     *
+* Authors:  Klaas Govaerts                            *
+*                                                     *
+******************************************************/
+
 #ifndef SERIALWRITER_H
 #define SERIALWRITER_H
 

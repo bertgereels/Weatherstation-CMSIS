@@ -1,7 +1,14 @@
+/******************************************************
+* GUI Control header file				      		            *
+*                                                     *
+* Authors:  Klaas Govaerts                            *
+*                                                     *
+******************************************************/
+
 #ifndef GUICONTROL_H
 #define GUICONTROL_H
 
-struct Settings{ 
+struct Settings{
     int32_t period;
     int32_t unixTime;
 };

@@ -1,9 +1,9 @@
 /******************************************************
-* Delay driver header file				      		  *
+* Delay driver header file				      		          *
 *                                                     *
 * Authors:  Bert Gereels                              *
 *           Klaas Govaerts                            *
-*           										  *
+*           										                      *
 ******************************************************/
 
 #ifndef DELAY_H_

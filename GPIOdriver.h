@@ -1,3 +1,10 @@
+/******************************************************
+* GPIO Driver header file				      		            *
+*                                                     *
+* Authors:  Klaas Govaerts                            *
+*                                                     *
+******************************************************/
+
 #ifndef GPIODRIVER_H
 #define GPIODRIVER_H
 #include <stdint.h>

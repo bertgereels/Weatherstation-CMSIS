@@ -1,5 +1,5 @@
 /******************************************************
-* I2C master driver c code file						  *
+* I2C master driver c code file						  					*
 *                                                     *
 * Author:  Bert Gereels                               *
 *                                                     *
@@ -62,17 +62,17 @@ void i2c2_init() {
     LPC_PINCON->PINSEL0 &=~ (1<<22);         // Set mbed pin P28 as SDA2
     LPC_PINCON->PINSEL0 |=  (1<<23);         // Set mbed pin P28 as SDA2
 
-	//Set pinmode
-	LPC_PINCON->PINMODE0 &=~ (1<<20);
-	LPC_PINCON->PINMODE0 |=  (1<<21);
-	LPC_PINCON->PINMODE0 &=~ (1<<22);
-	LPC_PINCON->PINMODE0 |=  (1<<23);
+		//Set pinmode
+		LPC_PINCON->PINMODE0 &=~ (1<<20);
+		LPC_PINCON->PINMODE0 |=  (1<<21);
+		LPC_PINCON->PINMODE0 &=~ (1<<22);
+		LPC_PINCON->PINMODE0 |=  (1<<23);
 
-	//SET pinmode_OD
-	LPC_PINCON->PINMODE_OD0 |= (1<<10);
+		//SET pinmode_OD
+		LPC_PINCON->PINMODE_OD0 |= (1<<10);
     LPC_PINCON->PINMODE_OD1 |= (1<<11);
 
-	// give power to the i2c2 hardware
+		//give power to the i2c2 hardware
     LPC_SC->PCONP |= (1 << 26);
 
     //Set frequency - 100kHz
@@ -126,9 +126,9 @@ void i2c2_byte_write(int8_t data){
 
     switch(status) {
         case 0x18:		//"Slave Address + Write has been transmitted, ACK has been received. The first data byte will be transmitted".
-        case 0x28:      //"Data has been transmitted, ACK has been received. If the transmitted data was the lastdata byte then transmit a STOP condition, otherwise transmit the next data byte".
+        case 0x28:    //"Data has been transmitted, ACK has been received. If the transmitted data was the lastdata byte then transmit a STOP condition, otherwise transmit the next data byte".
             break;
-        case 0x40:      //"Previous state was State 08 or State 10. Slave Address + Read has been transmitted,ACK has been received. Data will be received and ACK returned".
+        case 0x40:    //"Previous state was State 08 or State 10. Slave Address + Read has been transmitted,ACK has been received. Data will be received and ACK returned".
             break;
         default:
             break;
@@ -157,7 +157,3 @@ int8_t i2c2_do_read(int8_t last) {
     // return the data
     return (LPC_I2C2->I2DAT);
 }
-
-
-
-

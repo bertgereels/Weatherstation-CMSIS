@@ -1,3 +1,10 @@
+/******************************************************
+* IC Driver header file				      		              *
+*                                                     *
+* Authors:  Klaas Govaerts                            *
+*                                                     *
+******************************************************/
+
 #ifndef ICDRIVER_H
 #define ICDRIVER_H
 
