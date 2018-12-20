@@ -35,10 +35,10 @@ void stateMachine(void){
 		}
 		break;
 	case INITFAIL:
-		lcd_printf("Initialisation  failed");
+		lcd_setText("Initialisation  failed");
 		wait_s(5);
 		lcd_cls();
-		lcd_printf("Initialisation  retry");
+		lcd_setText("Initialisation  retry");
 		wait_s(5);
 		currentState = INIT;
 		break;
@@ -47,11 +47,10 @@ void stateMachine(void){
 		currentState = SETTIME;
 		break;
 	case SETTIME:
-		timer_init(2,1000000,gui_getValue("Enter UNIX time"));
+		gui_getValue("Enter UNIX time");
 		currentState = STARTTIMERS;
 		break;
 	case STARTTIMERS:
-		timer_start(2);
 		currentState = READSENSORVALUES;
 		break;
 	case READSENSORVALUES:
@@ -59,7 +58,7 @@ void stateMachine(void){
 		printMeasurements(&meting);
 		char temp[32] = "";
 		measurementToString(temp, &meting);
-		lcd_printf(temp);
+		lcd_setText(temp);
 		currentState = IDLE;
 		break;
 	case IDLE:
