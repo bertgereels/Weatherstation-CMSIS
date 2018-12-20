@@ -88,8 +88,10 @@ uint8_t initBME680Sensor(BME680Addr_t I2C_addr){
     }
 
     uint8_t cali[41];
+		//0x89 calibration data
     readRegister(0x89, 25);
     memcpy(cali, data, 25);
+		//0xE1 = calibration data
     readRegister(0xE1, 16);
     memcpy(cali + 25, data, 16);
 
@@ -126,24 +128,25 @@ uint8_t initBME680Sensor(BME680Addr_t I2C_addr){
 }
 
 uint8_t getChipID(){
-    readRegister(0xD0, 1);
-    return data[0];
+	//0xD0 = Request Chip ID
+  readRegister(0xD0, 1);
+  return data[0];
 }
 
 void readRegister(uint8_t reg, uint8_t size){
-    i2c2_start();
-    i2c2_byte_write(bme680_addr << 1); //1byte
-    i2c2_byte_write(reg);
-    i2c2_stop();
-    i2c2_start();
-    i2c2_byte_write(bme680_addr << 1 | 0x01);
+  i2c2_start();
+  i2c2_byte_write(bme680_addr << 1); //1byte
+  i2c2_byte_write(reg);
+  i2c2_stop();
+  i2c2_start();
+  i2c2_byte_write(bme680_addr << 1 | 0x01);
 
-    int i = 0;
-    for (; i< size -1; i++){
-        data[i] = i2c2_byte_read(0);
-    }
-    data[i] = i2c2_byte_read(1);
-    i2c2_stop();
+  int i = 0;
+  for (; i< size -1; i++){
+      data[i] = i2c2_byte_read(0);
+  }
+  data[i] = i2c2_byte_read(1);
+  i2c2_stop();
 }
 
 void writeRegister(uint8_t reg, uint8_t value){
@@ -151,77 +154,77 @@ void writeRegister(uint8_t reg, uint8_t value){
 	i2c2_byte_write(bme680_addr << 1);
 	i2c2_byte_write(reg);
 	i2c2_byte_write(value);
-    i2c2_stop();
+	i2c2_stop();
 }
 
 void setSequentialMode(){
-    //Set stand-by time between measurements
-		setStandByPeriod(BME680_FC_1);
+  //Set stand-by time between measurements
+	setStandByPeriod(BME680_FC_1);
 
-    //Set oversampling for T, P, H
-    setOversamplingValues(BME680_OS_X2,BME680_OS_X16,BME680_OS_X1);
+  //Set oversampling for T, P, H
+  setOversamplingValues(BME680_OS_X2,BME680_OS_X16,BME680_OS_X1);
 
-    //SetIIR filter for pressure & temperature
-    setIIRfilterCoefficient(BME680_FC_1);
+  //SetIIR filter for pressure & temperature
+  setIIRfilterCoefficient(BME680_FC_1);
 
-    //Set mode to sequential mode
-    //Set mode<1:0> to 0b11
-		//0x74 = Mode selection register
-    readRegister(0x74,1);
-    data[0] = (data[0] & 0xFC) | (3 & 0x03);
-    writeRegister(0x74, data[0]);
+  //Set mode to sequential mode
+  //Set mode<1:0> to 0b11
+	//0x74 = Mode selection register
+  readRegister(0x74,1);
+  data[0] = (data[0] & 0xFC) | (3 & 0x03);
+  writeRegister(0x74, data[0]);
 }
 
 void setStandByPeriod(BME680StandbyPeriod_t value){
-		//0x71 = Gas Control register
-    readRegister(0x71,1);
-    data[0] = (data[0] & 0x7F) | ((value & 0x0F) >> 3);
-    writeRegister(0x71, data[0]);
+	//0x71 = Gas Control register
+  readRegister(0x71,1);
+  data[0] = (data[0] & 0x7F) | ((value & 0x0F) >> 3);
+  writeRegister(0x71, data[0]);
 
-		//0x75 = IIR Filter control register
-    readRegister(0x75,1);
-    data[0] = (data[0] & 0x1F) | ((value & 0x07) << 5);
-    writeRegister(0x75, data[0]);
+	//0x75 = IIR Filter control register
+  readRegister(0x75,1);
+  data[0] = (data[0] & 0x1F) | ((value & 0x07) << 5);
+  writeRegister(0x75, data[0]);
 }
 
 void setOversamplingValues(BME680OversamplingValues_t temp, BME680OversamplingValues_t press, BME680OversamplingValues_t humi){
-		//Set oversampling value for temperature
-		//0x74 = Oversampling control register for temperature
-    readRegister(0x74,1);
-    data[0] = (data[0] & 0x1F) | ((temp & 0x07) << 5);
-    writeRegister(0x74, data[0]);
+	//Set oversampling value for temperature
+	//0x74 = Oversampling control register for temperature
+  readRegister(0x74,1);
+  data[0] = (data[0] & 0x1F) | ((temp & 0x07) << 5);
+  writeRegister(0x74, data[0]);
 
-    //Set oversampling value for pressure
-		//0x74 = Oversampling control register for pressure
-    readRegister(0x74,1);
-    data[0] = (data[0] & 0xE3) | ((press & 0x07) << 2);
-    writeRegister(0x74, data[0]);
+  //Set oversampling value for pressure
+	//0x74 = Oversampling control register for pressure
+  readRegister(0x74,1);
+  data[0] = (data[0] & 0xE3) | ((press & 0x07) << 2);
+  writeRegister(0x74, data[0]);
 
-    //Set oversampling value for humidity
-		//0x74 = Oversampling control register for humidity
-    readRegister(0x72,1);
-    data[0] = (data[0] & 0xF8) | (humi & 0x07);
-    writeRegister(0x72, data[0]);
+  //Set oversampling value for humidity
+	//0x74 = Oversampling control register for humidity
+  readRegister(0x72,1);
+  data[0] = (data[0] & 0xF8) | (humi & 0x07);
+  writeRegister(0x72, data[0]);
 }
 
 void setIIRfilterCoefficient(BME680FilterCoeff_t value){
-		//0x75 = IIR Filter control register
-    readRegister(0x75,1);
-    data[0] = (data[0] & 0xE3) | ((value & 0x07) << 2);
-    writeRegister(0x75, data[0]);
+	//0x75 = IIR Filter control register
+  readRegister(0x75,1);
+  data[0] = (data[0] & 0xE3) | ((value & 0x07) << 2);
+  writeRegister(0x75, data[0]);
 }
 
 
 int32_t getTemperature(){
-		//0x22 = MSB of temperature raw data
-    readRegister(0x22 + 0 * 0x11, 3);
-    uint32_t v_uncomp_temperature_u32 =  (data[0] << 12) | (data[1] << 4) | (data[2] >> 4);
+	//0x22 = MSB of temperature raw data
+  readRegister(0x22 + 0 * 0x11, 3);
+  uint32_t v_uncomp_temperature_u32 =  (data[0] << 12) | (data[1] << 4) | (data[2] >> 4);
 
-    int32_t var1 = ((int32_t)v_uncomp_temperature_u32 >> 3) - ((int32_t)(par_T1 << 1));
-    int32_t var2 = (var1 * (int32_t) par_T2) >> 11;
-    int32_t var3 = ((((var1 >> 1) * (var1 >> 1)) >> 12) * ((int32_t)(par_T3 << 4))) >> 14;
-    t_fine = var2 + var3;
-    return ((t_fine * 5) + 128) >> 8;
+  int32_t var1 = ((int32_t)v_uncomp_temperature_u32 >> 3) - ((int32_t)(par_T1 << 1));
+  int32_t var2 = (var1 * (int32_t) par_T2) >> 11;
+  int32_t var3 = ((((var1 >> 1) * (var1 >> 1)) >> 12) * ((int32_t)(par_T3 << 4))) >> 14;
+  t_fine = var2 + var3;
+  return ((t_fine * 5) + 128) >> 8;
 }
 
 int32_t getPressure(){
