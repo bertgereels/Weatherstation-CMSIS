@@ -34,26 +34,26 @@ TSL2561Gain_t;
 /**
  *  Initializes the TSL2561 sensor.
  *
- *  @param the I2C addres
+ *  @param I2C_addr - The I2C address.
  *
- *  @return value indicating if the sensor is initialized propery (should be 8a if everything is okay)
+ *  @return value indicating if the sensor is initialized properly (should be 8a if everything is okay)
  */
 uint8_t initTSL2561Sensor(TSL2561Addr_t I2C_addr);
 
 /**
  *	Enables the TSL2561 sensor by setting control bits to 0x03.
  */
-void enable();
+void enable(void);
 
 /**
- *  Disables the TSL2561 senso by setting control bits to 0x00.
+ *  Disables the TSL2561 sensor by setting control bits to 0x00.
  */
-void disable();
+void disable(void);
 
 /**
  *  Sets the TSL2561 sensor integration time.
  *
- *  @param The new integration time value, stored in a typedef. More time = more light to capture = more accurate measurement.
+ *  @param time - The new integration time value, stored in a typedef. More time = more light to capture = more accurate measurement.
  */
 void setIntegrationTime(TSL2561IntegrationTime_t time);
 
@@ -61,21 +61,26 @@ void setIntegrationTime(TSL2561IntegrationTime_t time);
 /**
  *  Sets the TSL2561 sensor gain.
  *
- *  @param The new gain value, stored in a typedef.
+ *  @param gain - The new gain value, stored in a typedef.
  */
 void setGain(TSL2561Gain_t gain);
 
 /**
  *  Reads luminosity on both channels of the TSL2561.
+ *
+ *  @param  broadband - Pointer to a uint16_t we will fill with a sensor
+ *                    reading from the IR+visible light diode.
+ *  @param  ir - Pointer to a uint16_t we will fill with a sensor the
+ *             IR-only light diode.
  */
 void getData (uint16_t *broadband, uint16_t *ir);
 
 /**
  *  Gets the broadband (mixed lighting) and IR only values from the TSL2561.
  *
- *  @param  broadband Pointer to a uint16_t we will fill with a sensor
+ *  @param  broadband - Pointer to a uint16_t we will fill with a sensor
  *                    reading from the IR+visible light diode.
- *  @param  ir Pointer to a uint16_t we will fill with a sensor the
+ *  @param  ir - Pointer to a uint16_t we will fill with a sensor the
  *             IR-only light diode.
  */
 void getLuminosity (uint16_t *broadband, uint16_t *ir);

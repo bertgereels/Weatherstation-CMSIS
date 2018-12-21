@@ -33,22 +33,22 @@ uint8_t initSensors(void);
 /**
  *  Performs 4 measurements (temperature, pressure, humidity and light level).
  *
- *  @param pointer to the struct that stores the 4 measurements
+ *  @param structToStoreIn - Pointer to the struct that stores the 4 measurements.
  */
 void getMeasurements(Measurements *structToStoreIn);
 
 /**
  *  Prints the 4 measurements in the console
  *
- *  @param pointer to the struct in which the 4 measurements are stored
+ *  @param measurementsToPrint - Pointer to the struct in which the 4 measurements are stored.
  */
 void printMeasurements(Measurements *measurementsToPrint);
 
 /**
  *  Converts the 4 measurements to a string (char array)
  *
- *  @param pointer to the char array that will hold the string
- *  @param pointer to the struct in which the 4 measurements are stored
+ *  @param destination - Pointer to the char array that will hold the string.
+ *  @param measurement - Pointer to the struct in which the 4 measurements are stored.
  */
 void measurementToString(char* destination, Measurements *measurement);
 
