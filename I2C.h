@@ -66,12 +66,12 @@ void i2c2_interface_enable(void);
 int i2c2_status(void);
 
 /**
- *  Starts the I2C2 engine
+ *  Puts a start condition on the bus.
  */
 void i2c2_start(void);
 
 /**
- *  Stops the I2C2 engine
+ *  Puts a stop condition on the bus.
  */
 void i2c2_stop(void);
 
