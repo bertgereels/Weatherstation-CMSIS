@@ -1,5 +1,5 @@
 /******************************************************
-* Button Control header file				      		        *
+* Button Control header file				          *
 *                                                     *
 * Authors:  Klaas Govaerts                            *
 *                                                     *
@@ -20,7 +20,10 @@ typedef enum Command Command;
 
 //Provide interface
 	/**
-	 * @return An "Command" enumeration representing the button pressed. "NONE" is returned if no button is pressed.
+	 * Get the command entered by the buttons on the Education Board.
+	 * Non blocking function.
+	 *
+	 * @return	A "Command" enumeration representing the button pressed. "NONE" is returned if no button is pressed.
 	 */
 	Command buttons_getCommand();
 

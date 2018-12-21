@@ -11,8 +11,9 @@
 //Provide interface
 /**
  * Print a formatted string to the LCD.
- * Fuction initalises the LCD if necessary.
- * @param format A formatted string.
+ * The fuction initialises the LCD if necessary.
+ *
+ * @param format 	A formatted string.
  */
 void lcd_printf(const char *format, ...);
 

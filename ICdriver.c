@@ -22,7 +22,7 @@ void IC502_write(uint8_t value){
 
 void IC501_init(uint8_t value){
     mbedPins_init(15,4);
-    mbedPins_write(0,15,4);
+    mbedPins_write(value,15,4);
 }
 
 void lcd_rs(uint8_t rs){

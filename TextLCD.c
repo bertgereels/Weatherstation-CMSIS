@@ -1,7 +1,12 @@
 /******************************************************
-* TextLCD c code file				      		                *
+* TextLCD c code file				                  *
 *                                                     *
 * Authors:  Klaas Govaerts                            *
+* 			Simon Ford                                *
+*                                                     *
+* Source used:                                        *
+* https://os.mbed.com/users/simon/code/TextLCD/       *
+*                                                     *
 *                                                     *
 ******************************************************/
 
