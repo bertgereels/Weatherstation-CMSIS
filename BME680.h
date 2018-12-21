@@ -58,9 +58,9 @@ BME680FilterCoeff_t;
 /**
  *  Initializes the BME680 sensor.
  *
- *  @param the I2C addres
+ *  @param I2C_addr - The I2C address.
  *
- *  @return value indicating if the sensor is initialized propery (should be 0 if everything is okay, when something is wrong: 1)
+ *  @return value indicating if the sensor is initialized properly (should be 0 if everything is okay, when something is wrong: 1)
  */
 uint8_t initBME680Sensor(BME680Addr_t I2C_addr);
 
@@ -74,8 +74,8 @@ uint8_t getChipID(void);
 /**
  *  Reads the specified register of the BME680
  *
- *  @param the register to read
- *  @param the amount of bytes to read
+ *  @param reg - The register to read.
+ *  @param size - The amount of bytes to read.
  */
 void readRegister(uint8_t reg, uint8_t size);
 
@@ -83,8 +83,8 @@ void readRegister(uint8_t reg, uint8_t size);
 /**
  *  Writes a value to the specified register of the BME680
  *
- *  @param the register to write to
- *  @param the value to write to the register
+ *  @param reg - The register to write to.
+ *  @param value - The value to write to the register.
  */
 void writeRegister(uint8_t reg, uint8_t value);
 
@@ -97,16 +97,16 @@ void setSequentialMode(void);
 /**
  *  Sets the time inbetween measurements
  *
- *  @param the value indicating the time inbetween: Possible values: see BME680StandbyPeriod_t typedef
+ *  @param value - The value indicating the time inbetween: Possible values: see BME680StandbyPeriod_t typedef.
  */
 void setStandByPeriod(BME680StandbyPeriod_t value);
 
 /**
  *  Sets the oversampling values for temperature, pressure and humidity. This limits the amount of noise.
  *
- *  @param the oversampling value for temperature. Possible values: see BME680OversamplingValues_t typedef
- *  @param the oversampling value for pressure. Possible values: see BME680OversamplingValues_t typedef
- *  @param the oversampling value for humidity. Possible values: see BME680OversamplingValues_t typedef
+ *  @param temp - The oversampling value for temperature. Possible values: see BME680OversamplingValues_t typedef.
+ *  @param press - The oversampling value for pressure. Possible values: see BME680OversamplingValues_t typedef.
+ *  @param humi - The oversampling value for humidity. Possible values: see BME680OversamplingValues_t typedef.
  */
 void setOversamplingValues(BME680OversamplingValues_t temp, BME680OversamplingValues_t press, BME680OversamplingValues_t humi);
 
@@ -114,7 +114,7 @@ void setOversamplingValues(BME680OversamplingValues_t temp, BME680OversamplingVa
  * 	This sets the IIR filter coefficients.
  * 	This helps to reduce short-term fluctuations in temperature and pressure data
  *
- *  @param the filter coefficient. Possible values: see BME680FilterCoeff_t typedef
+ *  @param value - The filter coefficient. Possible values: see BME680FilterCoeff_t typedef.
  */
 void setIIRfilterCoefficient(BME680FilterCoeff_t value);
 

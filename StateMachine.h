@@ -23,7 +23,7 @@ void stateMachine(void);
 /**
  *  Sets the time between measurements
  *
- *  @param The time between measurements in seconds
+ *  @param sec - The time between measurements in seconds.
  */
 void setRefreshPeriod(int sec);
 
