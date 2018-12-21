@@ -67,7 +67,8 @@ enum Buttons {
 	/**
 	 * Write a value of choice to a specific mbedPin.
 	 *
-	 * @param value		The value you want to write. A zero represents a low voltage, all other values represent a high voltage.
+	 * @param value		The value you want to write.
+	 * 					A zero represents a low voltage, all other values represent a high voltage.
 	 * @param mbedPin	The number of the mbed pin.
 	 */
 	void mbedPin_write(int value,uint8_t mbedPin);
@@ -75,33 +76,42 @@ enum Buttons {
 	/**
 	 * Initialise a specific lpc pin as GPIO output.
 	 *
-	 * @param port 		The port number of the lpc pin (Can range from 0 up to and including 4)
-	 * @param pin 		The pin number of the lpc pin (Can range from 0 up to and including 31)
+	 * @param port 		The port number of the lpc pin
+	 * 					(Can range from 0 up to and including 4)
+	 * @param pin 		The pin number of the lpc pin
+	 * 					(Can range from 0 up to and including 31)
 	 */
 	void lpcPin_init(uint8_t port, uint8_t pin);
 
 	/**
 	 * Write a high voltage to a specific lpc pin.
 	 *
-	 * @param port 		The port number of the lpc pin (Can range from 0 up to and including 4)
-	 * @param pin 		The pin number of the lpc pin (Can range from 0 up to and including 31)
+	 * @param port 		The port number of the lpc pin
+	 * 					(Can range from 0 up to and including 4)
+	 * @param pin 		The pin number of the lpc pin
+	 * 					(Can range from 0 up to and including 31)
 	 */
 	void lpcPin_on(uint8_t port, uint8_t pin);
 
 	/**
 	 * Write a low voltage to a specific lpc pin.
 	 *
-	 * @param port 		The port number of the lpc pin (Can range from 0 up to and including 4)
-	 * @param pin 		The pin number of the lpc pin (Can range from 0 up to and including 31)
+	 * @param port 		The port number of the lpc pin
+	 * 					(Can range from 0 up to and including 4)
+	 * @param pin 		The pin number of the lpc pin
+	 * 					(Can range from 0 up to and including 31)
 	 */
 	void lpcPin_off(uint8_t port, uint8_t pin);
 
 	/**
 	 * Write a value of choice to a specific lpc pin.
 	 *
-	 * @param value 	The value you want to write. A zero represents a low voltage, all other values represent a high voltage.
-	 * @param port 		The port number of the lpc pin (Can range from 0 up to and including 4)
-	 * @param pin 		The pin number of the lpc pin (Can range from 0 up to and including 31)
+	 * @param value 	The value you want to write.
+	 * 					A zero represents a low voltage, all other values represent a high voltage.
+	 * @param port 		The port number of the lpc pin
+	 * 					(Can range from 0 up to and including 4)
+	 * @param pin 		The pin number of the lpc pin
+	 * 					(Can range from 0 up to and including 31)
 	 */
 	void lpcPin_write(int value,uint8_t port, uint8_t pin);
 
@@ -110,7 +120,8 @@ enum Buttons {
 	 *
 	 * @param offset 	The number of the first mbed pin.
 	 * @param length 	The amount of consecutive mbed pins.
-	 * @param value 	The value you want to write. The LSB will be written to the first mbed pin.
+	 * @param value 	The value you want to write.
+	 * 					The LSB will be written to the first mbed pin.
 	 */
 	void mbedPins_write(uint32_t value,uint8_t offset,uint8_t length);
 
@@ -125,16 +136,20 @@ enum Buttons {
 	/**
 	 * Initialize lpc pin as input. Pin is input by default, unless previously changed to output mode.
 	 *
-	 * @param port 		The port number of the lpc pin (Can range from 0 up to and including 4)
-	 * @param pin 		The pin number of the lpc pin (Can range from 0 up to and including 31)
+	 * @param port 		The port number of the lpc pin
+	 * 					(Can range from 0 up to and including 4)
+	 * @param pin 		The pin number of the lpc pin
+	 * 					(Can range from 0 up to and including 31)
 	 */
 	void lpcPin_initIn(uint8_t port, uint8_t pin);
 
 	/**
 	 * Read the logical value of a specific lpc pin.
 	 *
-	 * @param port 		The port number of the lpc pin (Can range from 0 up to and including 4)
-	 * @param pin 		The pin number of the lpc pin (Can range from 0 up to and including 31)
+	 * @param port 		The port number of the lpc pin
+	 * 					(Can range from 0 up to and including 4)
+	 * @param pin 		The pin number of the lpc pin
+	 * 					(Can range from 0 up to and including 31)
 	 * @return 			1 if high voltage, 0 if low voltage.
 	 */
 	uint8_t lpcPin_read(uint8_t port, uint8_t pin);

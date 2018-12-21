@@ -37,7 +37,9 @@
 	 * Initialise and start a timer, incrementing every microsecond.
 	 * This function will also set the timer value to 0.
 	 *
-	 * @param number	The number of the timer (From 0 up to and including to 3), be aware that timer 0 is used as wait timer as well.
+	 * @param number	The number of the timer
+	 * 					(From 0 up to and including to 3)
+	 * 					Be aware that timer 0 is used as wait timer as well.
 	 */
 	void timer_start(uint8_t number);
 
@@ -45,7 +47,8 @@
 	 * Get the value of a specific timer.
 	 *
 	 * @param number	The number of the timer (From 0 up to and including to 3)
-	 * @return			The timer value stored in TC. (If timer number is valid.)
+	 * @return			The timer value stored in TC.
+	 * 					(If timer number is valid.)
 	 */
 	uint32_t timer_getValue(uint8_t number);
 

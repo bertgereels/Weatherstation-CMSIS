@@ -15,13 +15,16 @@
 
 //Provide interface
 	/**
- 	 * Initialise all components needed for communication with the LCD, on the Education Board.
+ 	 * Initialise all components needed for communication with the LCD.
+ 	 * The LCd is the HD44780U on the Education Board.
  	 */
     void lcd_init();
 
     /**
-     * Print text to the LCD on the Education board. Keep in mind that the LCD is 16x2.
-     * @param text		A null terminated string, that will be written to the LCD.
+     * Print text to the LCD on the Education board.
+     * Keep in mind that the LCD is 16x2.
+     *
+     * @param text		A null terminated string.
      */
     void lcd_setText(char* text);
 

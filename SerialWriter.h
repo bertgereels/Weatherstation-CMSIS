@@ -11,7 +11,8 @@
 //Provide interface
 	/**
 	 * Initialise pins 15,16,17 and 18 as GPIO output.
-	 * Function also enables the output of IC508 (this is a shift register on the Education Board).
+	 * Function also enables the output of IC508
+	 * (this is a shift register on the Education Board).
 	 */
 	void shiftRegister_init();
 

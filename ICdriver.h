@@ -13,22 +13,26 @@
 //Provide interface
 	/**
 	 * Initialise pins 19,20,21 and 22 as GPIO output.
-	 * Those pins are needed for communication with IC502 on the Education Board.
+	 * Those pins are needed for communication with IC502,
+	 * on the Education Board.
 	 */
 	void IC502_init();
 
 	/**
 	 * Write a value to IC502 on the Education Board.
 	 *
-	 * @param value		The 4 least significant bits will be written. The LSB will be written BUS_A0.
+	 * @param value		The 4 least significant bits will be written.
+	 * 					The LSB will be written BUS_A0.
 	 */
 	void IC502_write(uint8_t value);
 
 	/**
 	 * Initialise pins 15,16,17 and 18 as GPIO output.
-	 * Those pins are needed for communication with IC501 on the Education Board.
+	 * Those pins are needed for communication with IC501,
+	 *  on the Education Board.
 	 *
-	 * @param value 	The initial output value, with the LSB corresponding to pin 15.
+	 * @param value 	The initial output value.
+	 * 					The LSB corresponds to pin 15.
 	 */
 	void IC501_init(uint8_t value);
 

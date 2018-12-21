@@ -23,7 +23,8 @@ typedef enum Command Command;
 	 * Get the command entered by the buttons on the Education Board.
 	 * Non blocking function.
 	 *
-	 * @return	A "Command" enumeration representing the button pressed. "NONE" is returned if no button is pressed.
+	 * @return	A "Command" enumeration representing the button pressed.
+	 * 			"NONE" is returned if no button is pressed.
 	 */
 	Command buttons_getCommand();
 
