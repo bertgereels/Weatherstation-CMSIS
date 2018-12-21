@@ -6,6 +6,11 @@
 ******************************************************/
 
 #include "ButtonControl.h"
+
+/**
+ * Used functions in GPIOdriver are:
+ * uint8_t mbedPin_read(uint8_t mbedPin);
+ */
 #include "GPIOdriver.h"
 
 Command buttons_getCommand(){

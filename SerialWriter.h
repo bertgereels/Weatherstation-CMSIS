@@ -20,7 +20,8 @@
 	 * Write 4 bits (=a nibble) to IC508.
 	 * The nibble will be written to BUS_D7...BUS_D4. (See schematics)
 	 *
-	 * @param byte 		The 4 least significant bits of the input will be written.
+	 * @param byte 	The 4 least significant bits of the input,
+	 *				will be written.
 	 */
 	void shiftRegister_write4bits(uint8_t byte);
 

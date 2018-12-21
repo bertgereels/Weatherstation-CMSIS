@@ -11,9 +11,27 @@
 ******************************************************/
 
 #include "TextLCD.h"
-#include "GPIOdriver.h"
+
+/**
+ * Used functions in delay.h:
+ * void wait_ms(int ms);
+ * void wait_us(int us);
+ */
 #include "delay.h"
+
+/**
+ * Used functions in SerialWriter.h:
+ * void shiftRegister_init();
+ * void shiftRegister_write4bits(uint8_t byte);
+ */
 #include "SerialWriter.h"
+
+/**
+ * Used functions in ICdriver:
+ * void lcd_e(uint8_t e);
+ * void lcd_rs(uint8_t rs);
+ * void lcd_rs_e(uint8_t rs,uint8_t e);
+ */
 #include "ICdriver.h"
 
 int _LCDcolumn;

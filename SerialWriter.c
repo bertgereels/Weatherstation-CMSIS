@@ -5,9 +5,27 @@
 *                                                     *
 ******************************************************/
 
+/**
+ * Used functions in GPIOdriver:
+ * void mbedPin_off(uint8_t mbedPin);
+ * void mbedPin_on(uint8_t mbedPin);
+ * void mbedPin_write(int value,uint8_t mbedPin);
+ *
+ */
 #include "GPIOdriver.h"
+
+/**
+ * Used functions in ICdriver:
+ * void IC501_init(uint8_t value);
+ */
 #include "ICdriver.h"
+
 #include "SerialWriter.h"
+
+/**
+ * Used function in delay.h:
+ * void wait_us(int us);
+ */
 #include "delay.h"
 
 enum DataLines {

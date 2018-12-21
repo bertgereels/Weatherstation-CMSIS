@@ -5,10 +5,29 @@
 *                                                     *
 ******************************************************/
 
+
+/**
+ * Used functions in ButtonControl:
+ * Command buttons_getCommand();
+ */
 #include "ButtonControl.h"
+
 #include <stdlib.h>
+
+/**
+ * Used function in LCDcontroller:
+ * void lcd_printf(const char *format, ...);
+ */
 #include "LCDcontroller.h"
+
+/**
+ * Used functions in delay:
+ * void wait_ms(int ms);
+ * void timer_start(uint8_t number);
+ * uint32_t timer_getValue(uint8_t number);
+ */
 #include "delay.h"
+
 #include "GUIcontrol.h"
 
 void gui_getSettings(Settings *settings){

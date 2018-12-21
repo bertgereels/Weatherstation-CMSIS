@@ -5,6 +5,11 @@
 *                                                     *
 ******************************************************/
 
+/**
+ * Used functions in TextLCD:
+ * void lcd_init();
+ * void lcd_setText(char* text);
+ */
 #include "TextLCD.h"
 #include "LCDcontroller.h"
 #include <stdarg.h>

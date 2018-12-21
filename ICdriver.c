@@ -7,6 +7,12 @@
 
 
 #include "ICdriver.h"
+
+/**
+ * Used functions in GPIOdriver:
+ * void mbedPins_init(uint8_t offset,uint8_t length);
+ * void mbedPins_write(uint32_t value,uint8_t offset,uint8_t length);
+ */
 #include "GPIOdriver.h"
 
 uint8_t CHARACTER_LCD_RS=0;

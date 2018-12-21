@@ -54,7 +54,6 @@
 	 */
 	void lcd_e(uint8_t e);
 
-//Functions used for internal operation.
 	/**
 	 * Write a value to both the RS and ENABLE input of the LCD.
 	 * Before calling this function, call IC502_init.
