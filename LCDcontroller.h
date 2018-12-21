@@ -8,12 +8,12 @@
 #ifndef LCDCONTROLLER_H
 #define LCDCONTROLLER_H
 
+//Provide interface
 /**
  * Print a formatted string to the LCD.
  * Fuction initalises the LCD if necessary.
  * @param format A formatted string.
  */
 void lcd_printf(const char *format, ...);
-//int countPercent(const char *format);
 
 #endif

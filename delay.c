@@ -70,7 +70,7 @@ uint32_t timer_getValue(uint8_t number){
 	}
 }
 
-timer_isValid(uint8_t number){
+int timer_isValid(uint8_t number){
 	return (number>=0)||(number<=3);
 }
 

@@ -18,9 +18,10 @@ enum Command {
 };
 typedef enum Command Command;
 
-/**
- * @return An "Command" enumeration representing the button pressed. "NONE" is returned if no button is pressed.
- */
-Command buttons_getCommand();
+//Provide interface
+	/**
+	 * @return An "Command" enumeration representing the button pressed. "NONE" is returned if no button is pressed.
+	 */
+	Command buttons_getCommand();
 
 #endif
