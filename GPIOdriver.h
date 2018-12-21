@@ -50,6 +50,7 @@ enum Buttons {
 	 */
 	void mbedPin_init(uint8_t mbedPin);
 
+	
 	/**
 	 * Write a high voltage to a specific mbedPin.
 	 *
@@ -57,6 +58,7 @@ enum Buttons {
 	 */
 	void mbedPin_on(uint8_t mbedPin);
 
+	
 	/**
 	 * Write a low voltage to a specific mbedPin.
 	 *
@@ -64,15 +66,18 @@ enum Buttons {
 	 */
 	void mbedPin_off(uint8_t mbedPin);
 
+	
 	/**
 	 * Write a value of choice to a specific mbedPin.
 	 *
 	 * @param value		The value you want to write.
-	 * 					A zero represents a low voltage, all other values represent a high voltage.
+	 * 					A zero represents a low voltage.
+	 *					All other values represent a high voltage.
 	 * @param mbedPin	The number of the mbed pin.
 	 */
 	void mbedPin_write(int value,uint8_t mbedPin);
 
+	
 	/**
 	 * Initialise a specific lpc pin as GPIO output.
 	 *
@@ -83,6 +88,7 @@ enum Buttons {
 	 */
 	void lpcPin_init(uint8_t port, uint8_t pin);
 
+	
 	/**
 	 * Write a high voltage to a specific lpc pin.
 	 *
@@ -93,6 +99,7 @@ enum Buttons {
 	 */
 	void lpcPin_on(uint8_t port, uint8_t pin);
 
+	
 	/**
 	 * Write a low voltage to a specific lpc pin.
 	 *
@@ -103,11 +110,13 @@ enum Buttons {
 	 */
 	void lpcPin_off(uint8_t port, uint8_t pin);
 
+	
 	/**
 	 * Write a value of choice to a specific lpc pin.
 	 *
 	 * @param value 	The value you want to write.
-	 * 					A zero represents a low voltage, all other values represent a high voltage.
+	 * 					A zero represents a low voltage
+	 *					All other values represent a high voltage.
 	 * @param port 		The port number of the lpc pin
 	 * 					(Can range from 0 up to and including 4)
 	 * @param pin 		The pin number of the lpc pin
@@ -115,6 +124,7 @@ enum Buttons {
 	 */
 	void lpcPin_write(int value,uint8_t port, uint8_t pin);
 
+	
 	/**
 	 * Write to multiple consecutive mbed pins at once.
 	 *
@@ -125,6 +135,7 @@ enum Buttons {
 	 */
 	void mbedPins_write(uint32_t value,uint8_t offset,uint8_t length);
 
+	
 	/**
 	 * Initialise multiple consecutive mbed pins as GPIO output at once.
 	 *
@@ -133,8 +144,10 @@ enum Buttons {
 	 */
 	void mbedPins_init(uint8_t offset,uint8_t length);
 
+	
 	/**
-	 * Initialize lpc pin as input. Pin is input by default, unless previously changed to output mode.
+	 * Initialize lpc pin as input.
+	 * Pin is input by default, unless previously changed to output mode.
 	 *
 	 * @param port 		The port number of the lpc pin
 	 * 					(Can range from 0 up to and including 4)
@@ -143,6 +156,7 @@ enum Buttons {
 	 */
 	void lpcPin_initIn(uint8_t port, uint8_t pin);
 
+	
 	/**
 	 * Read the logical value of a specific lpc pin.
 	 *
@@ -154,6 +168,7 @@ enum Buttons {
 	 */
 	uint8_t lpcPin_read(uint8_t port, uint8_t pin);
 
+	
 	/**
 	 * Read the logical value of a specific mbed pin.
 	 *
@@ -162,6 +177,7 @@ enum Buttons {
 	 */
 	uint8_t mbedPin_read(uint8_t mbedPin);
 
+	
 //Functions used for internal operation.
 	/**
 	 * This function translates an mbed pin to it's respective lpc port number.
@@ -171,6 +187,7 @@ enum Buttons {
 	 */
 	uint8_t mbedPin_getLPCport(uint8_t mbedPin);
 
+	
 	/**
 	 * This function translates an mbed pin to it's respective lpc pin number.
 	 *
@@ -179,6 +196,7 @@ enum Buttons {
 	 */
 	uint8_t mbedPin_getLPCpin(uint8_t mbedPin);
 
+	
 	/**
 	 * Check if a specific mbedPin is a valid GPIO output.
 	 *
@@ -187,6 +205,7 @@ enum Buttons {
 	 */
 	int mbedPin_isValid(uint8_t mbedPin);
 
+	
 	/**
 	 * Returns a pointer to a LPC_GPIO_TypeDef for a specific LPC port number.
 	 *
@@ -195,6 +214,7 @@ enum Buttons {
 	 */
 	LPC_GPIO_TypeDef* getGPIOTypeDef(uint8_t port);
 
+	
 	/**
 	 * Check if port number is valid.
 	 *
@@ -203,6 +223,7 @@ enum Buttons {
 	 */
 	int lpcPort_isValid(uint8_t port);
 
+	
 	/**
 	 * Check if pin number is valid.
 	 *
@@ -211,6 +232,7 @@ enum Buttons {
 	 */
 	int lpcPin_isValid(uint8_t pin);
 
+	
 	/**
 	 * Check if a lpc port number and pin number are valid.
 	 *
@@ -220,6 +242,7 @@ enum Buttons {
 	 */
 	int lpcPortPin_isValid(uint8_t port,uint8_t pin);
 
+	
 	/**
 	 * Return the bit at a given index of an uint32_t.
 	 *

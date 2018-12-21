@@ -19,6 +19,7 @@
 	 */
 	void wait_s(int s);
 
+	
 	/**
 	 *  Waits for x amount of milliseconds
 	 *
@@ -26,6 +27,7 @@
 	 */
 	void wait_ms(int ms);
 
+	
 	/**
 	 *  Waits for x amount of microseconds
 	 *
@@ -33,20 +35,23 @@
 	 */
 	void wait_us(int us);
 
+	
 	/**
 	 * Initialise and start a timer, incrementing every microsecond.
 	 * This function will also set the timer value to 0.
 	 *
 	 * @param number	The number of the timer
 	 * 					(From 0 up to and including to 3)
-	 * 					Be aware that timer 0 is used as wait timer as well.
+	 * 					Be aware that timer 0 is used as wait timer.
 	 */
 	void timer_start(uint8_t number);
 
+	
 	/**
 	 * Get the value of a specific timer.
 	 *
-	 * @param number	The number of the timer (From 0 up to and including to 3)
+	 * @param number	The number of the timer
+	 *					(From 0 up to and including to 3)
 	 * @return			The timer value stored in TC.
 	 * 					(If timer number is valid.)
 	 */
@@ -62,6 +67,7 @@
 	 */
 	int timer_isValid(uint8_t number);
 
+	
 	/**
 	 * Returns a pointer to a LPC_TIM_TypeDef for a specific timer number.
 	 *

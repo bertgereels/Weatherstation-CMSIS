@@ -25,12 +25,13 @@ typedef struct Settings Settings;
 	 */
 	void gui_getSettings(Settings *settings);
 
+	
 	/**
 	 * Display a query on the screen, and return the result.
 	 * Blocking function.
 	 *
 	 * @param query 	A null terminated string.
-	 * 					This is text that will be displayed at first line of the LCD.
+	 * 					This text will be displayed at first line.
 	 * 					Query should not be longer than 16 characters.
 	 * @return 			The numerical value entered by the user.
 	 */

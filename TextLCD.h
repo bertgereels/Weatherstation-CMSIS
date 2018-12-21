@@ -20,6 +20,7 @@
  	 */
     void lcd_init();
 
+	
     /**
      * Print text to the LCD on the Education board.
      * Keep in mind that the LCD is 16x2.
@@ -44,6 +45,7 @@
      */
     void lcd_cls();
 
+	
     /**
      * Write a character to a specified location on the LCD.
      *
@@ -53,6 +55,7 @@
      */
     void lcd_character(int column, int row, int c);
 
+	
     /**
      * Put a character on the next position of the LCD.
      *
@@ -60,6 +63,7 @@
      */
     int lcd_putc(int value);
 
+	
     /**
      * Lookup the address of a specific column and row on the LCD.
      *
@@ -69,6 +73,7 @@
      */
     int lcd_address(int column, int row);
 
+	
     /**
      * Write a byte to the LCD.
      * Byte will be written as 2 separate nibbles.
@@ -77,6 +82,7 @@
      */
     void lcd_writeByte(int value);
 
+	
     /**
      * Write a command to the LCD.
      *
@@ -84,6 +90,7 @@
      */
     void lcd_writeCommand(int command);
 
+	
     /**
      * Write data to the LCD.
      *
