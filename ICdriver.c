@@ -51,8 +51,6 @@ void lcd_rs_e(uint8_t rs,uint8_t e){
         IC502_write(7);
     }
     if((!rs)&&(e)){
-        //LPCpin_init(1,18);
-        //LPCpin_on(1,18);
         IC502_write(4);
     }
     if((!rs)&&(!e)){

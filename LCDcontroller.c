@@ -26,23 +26,8 @@ void lcd_printf(const char *format, ...){
         initialized=1;
     }
 
-    //int formatSpecifiers=countPercent(format);
     va_start(args,format);
     vsnprintf(output, sizeof(output), format, args);
     va_end(args);
     lcd_setText(output);
 }
-
-/*
-int countPercent(const char *format){
-    int number=0;
-    for(int i=0;;i++){
-        if(format[i]=='%'){
-            number++;
-        }
-        if(format[i]=='\0'){
-            break;
-        }
-    }
-    return number;
-}*/

@@ -33,10 +33,7 @@
 void gui_getSettings(Settings *settings){
     settings->period=gui_getValue("Seconds between");
     settings->unixTime=gui_getValue("Enter UNIX time");
-    //lcd_printf("Read value.");
-    //wait_ms(1000);
-    lcd_printf("%i\n%i",settings->period,settings->unixTime);
-    //lcd_printf("%ld\n%ld",unixTime,period);
+    //lcd_printf("%i\n%i",settings->period,settings->unixTime);
 }
 
 int32_t gui_getValue(const char *query){
@@ -90,5 +87,3 @@ int32_t gui_getValue(const char *query){
     wait_ms(200);
     }
 }
-
-//Update display method

@@ -42,21 +42,6 @@ void lpcPin_init(uint8_t port, uint8_t pin){
         portGPIO->FIODIR |= 1 << pin;
         portGPIO->FIOMASK &= ~(1 << pin);
     }
-    /*
-    switch(port){
-        case 0:
-            LPC_GPIO0->FIODIR |= 1 << pin;
-            LPC_GPIO0->FIOMASK &= ~(1 << pin);
-            break;
-        case 1:
-            LPC_GPIO1->FIODIR |= 1 << pin;
-            LPC_GPIO1->FIOMASK &= ~(1 << pin);
-            break;
-        case 2:
-            LPC_GPIO2->FIODIR |= 1 << pin;
-            LPC_GPIO2->FIOMASK &= ~(1 << pin);
-            break;
-  }*/
 }
 
 void lpcPin_on(uint8_t port, uint8_t pin){
@@ -64,18 +49,6 @@ void lpcPin_on(uint8_t port, uint8_t pin){
         LPC_GPIO_TypeDef* portGPIO=getGPIOTypeDef(port);
         portGPIO->FIOSET |= 1 << pin;
     }
-    /*
-    switch(port){
-    case 0:
-        LPC_GPIO0->FIOSET |= 1 << pin;
-        break;
-    case 1:
-        LPC_GPIO1->FIOSET |= 1 << pin;
-        break;
-    case 2:
-        LPC_GPIO2->FIOSET |= 1 << pin;
-        break;
-    }*/
 }
 
 void lpcPin_off(uint8_t port, uint8_t pin){
@@ -83,23 +56,9 @@ void lpcPin_off(uint8_t port, uint8_t pin){
         LPC_GPIO_TypeDef* portGPIO=getGPIOTypeDef(port);
         portGPIO->FIOCLR |= 1 << pin;
     }
-    /*
-    switch(port){
-        case 0:
-            LPC_GPIO0->FIOCLR |= 1 << pin;
-            break;
-        case 1:
-            LPC_GPIO1->FIOCLR |= 1 << pin;
-            break;
-        case 2:
-            LPC_GPIO2->FIOCLR |= 1 << pin;
-            break;
-        }*/
 }
 
-/*
- * Write a single bit
- */
+
 void lpcPin_write(int value,uint8_t port, uint8_t pin){
     if(value){
         lpcPin_on(port,pin);
@@ -126,9 +85,6 @@ uint8_t mbedPin_getLPCpin(uint8_t mbedPin){
     }
 }
 
-/**
- * Write with offset
- */
 void mbedPins_write(uint32_t value,uint8_t offset,uint8_t length){
     for(int i=0;i<length;i++){
         uint32_t mask=1<<i;
@@ -140,23 +96,16 @@ void mbedPins_write(uint32_t value,uint8_t offset,uint8_t length){
     }
 }
 
-/**
- * Initialize with offset
- */
 void mbedPins_init(uint8_t offset,uint8_t length){
     for(int i=0;i<=length;i++){
         mbedPin_init(i+offset);
     }
 }
 
-/*
- * Initialize port as input. Port is input by default, unless previously changed to write mode.
- */
 void lpcPin_initIn(uint8_t port, uint8_t pin){
     if(lpcPortPin_isValid(port,pin)){
         LPC_GPIO_TypeDef* portGPIO=getGPIOTypeDef(port);
         portGPIO->FIODIR &= ~(1 << pin); //Set bit off
-        //TODO mask
     }
 }
 

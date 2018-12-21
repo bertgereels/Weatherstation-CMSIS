@@ -24,7 +24,6 @@ int main(void){
 void stateMachine(void){
 	switch(currentState){
 	case INIT:
-		//setRefreshPeriod(20);
 		lcd_init();
 		i2c2_init();
 		if(!initSensors() && i2c2_status() == 0xf8){

@@ -45,12 +45,6 @@ enum pins {
 void lcd_init() {
     lcd_rs_e(0,1);
     shiftRegister_init();
-    //mbedPins_init(15,4); //TODO
-    //mbedPin_init(ePin);
-    //mbedPin_init(rsPin);
-
-    //mbedPin_on(ePin);
-    //mbedPin_off(rsPin);            // command mode
 
     wait_ms(15);        // Wait 15ms to ensure powered up
 
@@ -118,34 +112,24 @@ void lcd_setText(char* text){
 }
 
 void lcd_writeByte(int value) {
-    //mbedPins_write(value >> 4,15,4); //TODO
     shiftRegister_write4bits(value >> 4);
-    //_d = value >> 4;
     wait_us(40); // most instructions take 40us
-    //mbedPin_off(ePin);
     lcd_e(0);
     wait_us(40);
-    //mbedPin_on(ePin);
     lcd_e(1);
-    //mbedPins_write(value >> 0,15,4); //TODO
     shiftRegister_write4bits(value >> 0);
-    //_d = value >> 0;
     wait_us(40);
-    //mbedPin_off(ePin);
     lcd_e(0);
     wait_us(40);  // most instructions take 40us
-    //mbedPin_on(ePin);
     lcd_e(1);
 }
 
 void lcd_writeCommand(int command) {
-    //mbedPin_off(rsPin);
     lcd_rs(0);
     lcd_writeByte(command);
 }
 
 void lcd_writeData(int data) {
-    //mbedPin_on(rsPin);
     lcd_rs(1);
     lcd_writeByte(data);
 }
